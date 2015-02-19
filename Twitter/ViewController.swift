@@ -20,6 +20,14 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func onLogin(sender: AnyObject) {
+        TwitterClient.sharedInstance.requestSerializer.removeAccessToken()
+        TwitterClient.sharedInstance.fetchRequestTokenWithPath("oauth/request_token", method: "GET", callbackURL: NSURL(string: "jttwitter:oauth"), scope: nil, success: { (requestToken: BDBOAuth1Credential!) -> Void in
+            println("Got the request token: \(requestToken.token)")
+            }) { (error: NSError!) -> Void in
+                println("Error getting request token: \(error)")
+        }
+    }
 
 }
 
