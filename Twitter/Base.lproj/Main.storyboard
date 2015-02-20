@@ -4,10 +4,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6735"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Login View Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="Twitter" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="vXZ-lx-hvc" customClass="LoginViewController" customModule="Twitter" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
@@ -16,22 +16,84 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="279-4S-3SO">
-                                <rect key="frame" x="137" y="238" width="106" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="279-4S-3SO">
+                                <rect key="frame" x="99" y="215" width="122" height="30"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="Login to Twitter">
+                                    <color key="titleColor" red="0.96078431372549022" green="0.97254901960784312" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="onLogin:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="CZZ-iW-Wh3"/>
+                                    <action selector="onLogin:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="bhU-Zl-3sP"/>
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.33333333333333331" green="0.67450980392156867" blue="0.93333333333333335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="279-4S-3SO" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="195" id="Wf4-Pa-B86"/>
+                            <constraint firstAttribute="trailing" secondItem="279-4S-3SO" secondAttribute="trailing" constant="99" id="l0k-DK-0mC"/>
+                            <constraint firstItem="279-4S-3SO" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="99" id="sNK-ng-jxM"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <segue destination="CER-QV-y5p" kind="modal" identifier="loginSegue" id="0rn-JB-9RJ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="181.33333333333334" y="406.12"/>
+            <point key="canvasLocation" x="181" y="406"/>
+        </scene>
+        <!--Home Timeline View Controller-->
+        <scene sceneID="Wfg-OC-p3U">
+            <objects>
+                <viewController id="J1R-op-MjB" customClass="HomeTimelineViewController" customModule="Twitter" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="4x5-2R-liJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="zTI-Df-59o"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Ma1-fZ-TuO">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Gxx-Yt-W3G">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Gxx-Yt-W3G" firstAttribute="top" secondItem="Ma1-fZ-TuO" secondAttribute="top" id="PUT-hX-9yp"/>
+                            <constraint firstItem="zTI-Df-59o" firstAttribute="top" secondItem="Gxx-Yt-W3G" secondAttribute="bottom" id="XPp-e6-2LR"/>
+                            <constraint firstAttribute="trailing" secondItem="Gxx-Yt-W3G" secondAttribute="trailing" id="iIg-G5-Fqe"/>
+                            <constraint firstItem="Gxx-Yt-W3G" firstAttribute="leading" secondItem="Ma1-fZ-TuO" secondAttribute="leading" id="kWZ-1I-mh4"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="od1-r9-boR"/>
+                    <connections>
+                        <outlet property="tableView" destination="Gxx-Yt-W3G" id="xoq-pT-2QF"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zhM-94-g0n" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1100" y="406"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="8cQ-dC-ZUX">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="CER-QV-y5p" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Rhh-bp-7GT">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="J1R-op-MjB" kind="relationship" relationship="rootViewController" id="Yn8-PZ-9VS"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Aec-lf-ZI4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="568" y="406"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
