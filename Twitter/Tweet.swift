@@ -15,6 +15,14 @@ class Tweet {
     var retweetCount: Int?
     var favoriteCount: Int?
     var createdAt: NSDate?
+
+    init(user: User, text: String) {
+        self.user = user
+        self.text = text
+        self.retweetCount = 0
+        self.favoriteCount = 0
+        self.createdAt = NSDate()
+    }
     
     init(dict: NSDictionary) {
         user = User(dict: dict["user"] as NSDictionary)

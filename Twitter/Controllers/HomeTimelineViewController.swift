@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ComposeTweetViewDelegate {
 
     var tweets: [Tweet] = []
 
@@ -35,22 +35,17 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
         var cellNib = UINib(nibName: "TweetCell", bundle: NSBundle.mainBundle())
         tableView.registerNib(cellNib, forCellReuseIdentifier: "TweetCell")
         
+        // load tweets
+        loadTweets(refreshing: false)
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        // load tweets
-        loadTweets(refreshing: false)
     }
 
     func onRefresh() {
         // load tweets
         loadTweets(refreshing: true)
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -60,52 +55,65 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("TweetCell", forIndexPath: indexPath) as TweetCell
         
-        // get tweet for this row
+        // get tweet for this row and set it in the cell
         let tweet = tweets[indexPath.row]
-        if let url = tweet.user?.profileImageUrl? {
-            cell.profileImageUrl.setImageWithURL(NSURL(string: url))
-        }
-        cell.name.text = tweet.user?.name
-        cell.username.text = tweet.user?.username
-        cell.tweetText.text = tweet.text
-        cell.retweetCount.text = String(tweet.retweetCount!)
-        cell.favoriteCount.text = String(tweet.favoriteCount!)
+        cell.setTweet(tweet)
+        
         return cell
     }
 
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("TweetDetailsViewController") as UIViewController
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    
     func loadTweets(refreshing refresh: Bool) {
         // show progress HUD before invoking API call
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         
-        // retrieve user via REST API
-        TwitterClient.sharedInstance.GET("1.1/statuses/home_timeline.json", parameters: nil,
-            success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
-//                self.networkErrorLabel.hidden = true
-                self.tweets = Tweet.tweetsFromArray(response as [NSDictionary])
+        // load latest home timeline
+        TwitterClient.sharedInstance.getHomeTimeline { (tweets, error) -> Void in
+            if error == nil {
+                //                self.networkErrorLabel.hidden = true
+                self.tweets = tweets
                 if refresh {
                     self.refreshControl.endRefreshing()
                 }
                 MBProgressHUD.hideHUDForView(self.view, animated: true)
                 self.tableView.reloadData()
-            },
-            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+            } else {
                 NSLog("Failed to retrieve tweets: \(error)")
+                // TODO: display error
             }
-        )
+        }
     }
     
     @IBAction func onCompose(sender: AnyObject) {
-        self.navigationController?.performSegueWithIdentifier("ComposeSegue", sender: self)
+        // get nav controller of the compose view
+        let composeNC = self.storyboard?.instantiateViewControllerWithIdentifier("ComposeTweetNavigationController") as
+        UINavigationController
+        
+        // set the delegate of the ComposeTweetViewController to self
+        // TODO: this line seems hacky and dangerous - IS THERE A BETTER WAY??
+        (composeNC.viewControllers[0] as ComposeTweetViewController).delegate = self
+
+        // present modally
+        self.navigationController?.presentViewController(composeNC, animated: true, completion: nil)
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func composeTweetView(composeTweetVC: ComposeTweetViewController, didCancel dummy: String) {
+        println("About to dismiss Compose View")
+        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
-    */
 
+    func composeTweetView(composeTweetVC: ComposeTweetViewController, didTweet tweet: Tweet) {
+        println("Tweet successfully posted - dismissing Compose View")
+        
+        // add new tweet to top of timeline before dismissing compose view
+        self.tweets.insert(tweet, atIndex: 0)
+        self.tableView.reloadData()
+        
+        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+    }
 }

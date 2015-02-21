@@ -18,6 +18,43 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
         }
         return Static.instance
     }
+
+    //
+    // REST API (https://dev.twitter.com/rest/public)
+    //
+
+    func statusUpdate(tweet: String, onComplete: (error: NSError!) -> Void) {
+        // set up params
+        let params = [ "status" : tweet ]
+        
+        // invoke API
+        TwitterClient.sharedInstance.POST("1.1/statuses/update.json", parameters: params,
+            success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+                onComplete(error: nil)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+                NSLog("Error while POSTing status update: \(error)")
+                onComplete(error: error)
+            }
+        )
+    }
+    
+    func getHomeTimeline(onComplete: (tweets: [Tweet]!, error: NSError!) -> Void) {
+        TwitterClient.sharedInstance.GET("1.1/statuses/home_timeline.json", parameters: nil,
+            success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+                var tweets = Tweet.tweetsFromArray(response as [NSDictionary])
+                onComplete(tweets: tweets, error: nil)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+                NSLog("Failed to retrieve tweets: \(error)")
+                onComplete(tweets: nil, error: error)
+            }
+        )
+    }
+    
+    //
+    // OAuth 1.0a
+    //
     
     func login(onCompletion: (user: User?, error: NSError?) -> ()) {
         // save completion handler
@@ -50,7 +87,9 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
                 TwitterClient.sharedInstance.GET("1.1/account/verify_credentials.json", parameters: nil,
                     success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
                         var user = User(dict: response as NSDictionary)
+                        User.currentUser = user
                         println("Logged in as: \(user.username)")
+
                         // invoke completion handler with user
                         self.onCompletionHandler!(user: user, error: nil)
                     },

@@ -10,6 +10,8 @@ import UIKit
 
 class TweetCell: UITableViewCell {
 
+    private var tweet: Tweet!
+    
     @IBOutlet weak var profileImageUrl: UIImageView!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var username: UILabel!
@@ -20,10 +22,8 @@ class TweetCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-        
+
         self.tweetText.preferredMaxLayoutWidth = self.tweetText.frame.size.width
-        
     }
 
     override func layoutSubviews() {
@@ -35,6 +35,19 @@ class TweetCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+
+    func setTweet(tweet: Tweet) {
+        self.tweet = tweet
+        
+        if let url = tweet.user?.profileImageUrl? {
+            self.profileImageUrl.setImageWithURL(NSURL(string: url))
+        }
+        self.name.text = tweet.user?.name
+        self.username.text = tweet.user?.username
+        self.tweetText.text = tweet.text
+        self.retweetCount.text = String(tweet.retweetCount!)
+        self.favoriteCount.text = String(tweet.favoriteCount!)
     }
     
 }

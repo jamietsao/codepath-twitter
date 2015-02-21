@@ -21,6 +21,7 @@
 		7D667A341A971BF100EFB865 /* TweetCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D667A321A971BF100EFB865 /* TweetCell.xib */; };
 		7DB14F521A9877B3007A53B0 /* ComposeTweetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB14F511A9877B3007A53B0 /* ComposeTweetViewController.swift */; };
 		7DB14F551A987A85007A53B0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DB14F531A987A85007A53B0 /* Main.storyboard */; };
+		7DB14F571A9929B2007A53B0 /* TweetDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB14F561A9929B2007A53B0 /* TweetDetailsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		7D667A321A971BF100EFB865 /* TweetCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TweetCell.xib; path = Views/TweetCell.xib; sourceTree = "<group>"; };
 		7DB14F511A9877B3007A53B0 /* ComposeTweetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ComposeTweetViewController.swift; path = Controllers/ComposeTweetViewController.swift; sourceTree = "<group>"; };
 		7DB14F541A987A85007A53B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		7DB14F561A9929B2007A53B0 /* TweetDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TweetDetailsViewController.swift; path = Controllers/TweetDetailsViewController.swift; sourceTree = "<group>"; };
 		DD35AF502054442C899EDE94 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -161,6 +163,7 @@
 				7D667A271A96BAC200EFB865 /* LoginViewController.swift */,
 				7D667A2E1A971BAC00EFB865 /* HomeTimelineViewController.swift */,
 				7DB14F511A9877B3007A53B0 /* ComposeTweetViewController.swift */,
+				7DB14F561A9929B2007A53B0 /* TweetDetailsViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -331,6 +334,7 @@
 				7D667A331A971BF100EFB865 /* TweetCell.swift in Sources */,
 				7DB14F521A9877B3007A53B0 /* ComposeTweetViewController.swift in Sources */,
 				7D667A2D1A970EFA00EFB865 /* Tweet.swift in Sources */,
+				7DB14F571A9929B2007A53B0 /* TweetDetailsViewController.swift in Sources */,
 				7D667A281A96BAC200EFB865 /* LoginViewController.swift in Sources */,
 				7D667A251A955EEA00EFB865 /* TwitterClient.swift in Sources */,
 				7D667A2F1A971BAC00EFB865 /* HomeTimelineViewController.swift in Sources */,

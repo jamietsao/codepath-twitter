@@ -8,25 +8,64 @@
 
 import UIKit
 
-class ComposeTweetViewController: UIViewController {
+protocol ComposeTweetViewDelegate: class {
+    func composeTweetView(composeTweetVC: ComposeTweetViewController, didCancel dummy: String)
+    func composeTweetView(composeTweetVC: ComposeTweetViewController, didTweet tweet: Tweet)
+}
 
+class ComposeTweetViewController: UIViewController, UITextViewDelegate {
+
+    // delegate
+    weak var delegate: ComposeTweetViewDelegate?
+    
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var username: UILabel!
     @IBOutlet weak var tweetText: UITextView!
+    @IBOutlet weak var whatsHappening: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        // initialize nav bar
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Bordered, target: self, action: "onCancel")
+        cancelButton.tintColor = UIColor.whiteColor()
+        let tweetButton = UIBarButtonItem(title: "Tweet", style: UIBarButtonItemStyle.Bordered, target: self, action: "onTweet")
+        tweetButton.tintColor = UIColor.whiteColor()
+        navigationItem.leftBarButtonItem = cancelButton
+        navigationItem.rightBarButtonItem = tweetButton
+        
+        if let user = User.currentUser {
+            self.profileImage.setImageWithURL(NSURL(string: user.profileImageUrl))
+            self.name.text = user.name
+            self.username.text = user.username
+        }
+        
+        tweetText.delegate = self
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func textViewDidBeginEditing(textView: UITextView) {
+        self.whatsHappening.hidden = true
     }
     
-
+    func onCancel() {
+        self.delegate?.composeTweetView(self, didCancel: "")
+    }
+    
+    func onTweet() {
+        // handler
+        func onComplete(error: NSError!) -> Void {
+            if error == nil {
+                self.delegate?.composeTweetView(self, didTweet: Tweet(user: User.currentUser!, text: tweetText.text))
+            } else {
+                // TODO
+            }
+        }
+        
+        // POST tweet
+        TwitterClient.sharedInstance.statusUpdate(tweetText.text, onComplete)
+    }
+    
     /*
     // MARK: - Navigation
 
