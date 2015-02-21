@@ -11,31 +11,41 @@ import UIKit
 class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     var tweets: [Tweet] = []
-    
+
+    // refresh control
+    var refreshControl: UIRefreshControl!
+
     @IBOutlet weak var tableView: UITableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // initialize table view
         tableView.dataSource = self
         tableView.delegate = self
-        
+        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableViewAutomaticDimension
+
+        // set up UIRefreshControl
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: "onRefresh", forControlEvents: UIControlEvents.ValueChanged)
+        tableView.insertSubview(refreshControl, atIndex: 0)
+
         // register custom cells
         var cellNib = UINib(nibName: "TweetCell", bundle: NSBundle.mainBundle())
         tableView.registerNib(cellNib, forCellReuseIdentifier: "TweetCell")
         
-        
-        // retrieve user via REST API
-        TwitterClient.sharedInstance.GET("1.1/statuses/home_timeline.json", parameters: nil,
-            success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
-                self.tweets = Tweet.tweetsFromArray(response as [NSDictionary])
-                self.tableView.reloadData()
-            },
-            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
-                NSLog("Failed to retrieve tweets: \(error)")
-            }
-        )
-        
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        // load tweets
+        loadTweets(refreshing: false)
+    }
+
+    func onRefresh() {
+        // load tweets
+        loadTweets(refreshing: true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -63,6 +73,31 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
         return cell
     }
 
+    func loadTweets(refreshing refresh: Bool) {
+        // show progress HUD before invoking API call
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        
+        // retrieve user via REST API
+        TwitterClient.sharedInstance.GET("1.1/statuses/home_timeline.json", parameters: nil,
+            success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+//                self.networkErrorLabel.hidden = true
+                self.tweets = Tweet.tweetsFromArray(response as [NSDictionary])
+                if refresh {
+                    self.refreshControl.endRefreshing()
+                }
+                MBProgressHUD.hideHUDForView(self.view, animated: true)
+                self.tableView.reloadData()
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+                NSLog("Failed to retrieve tweets: \(error)")
+            }
+        )
+    }
+    
+    @IBAction func onCompose(sender: AnyObject) {
+        self.navigationController?.performSegueWithIdentifier("ComposeSegue", sender: self)
+    }
+    
     /*
     // MARK: - Navigation
 

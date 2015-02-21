@@ -21,6 +21,14 @@ class TweetCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        self.tweetText.preferredMaxLayoutWidth = self.tweetText.frame.size.width
+        
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.tweetText.preferredMaxLayoutWidth = self.tweetText.frame.size.width
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
