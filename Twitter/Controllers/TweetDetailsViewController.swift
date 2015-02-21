@@ -10,10 +10,27 @@ import UIKit
 
 class TweetDetailsViewController: UIViewController {
 
+    private var tweet: Tweet!
+    
+    @IBOutlet weak var profileImage: UIImageView!
+    @IBOutlet weak var name: UILabel!
+    @IBOutlet weak var username: UILabel!
+    @IBOutlet weak var tweetText: UITextView!
+    @IBOutlet weak var createdAt: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        if let url = tweet.user?.profileImageUrl? {
+            self.profileImage.setImageWithURL(NSURL(string: url))
+        }
+        self.name.text = tweet.user?.name
+        if let username = tweet.user?.username {
+            self.username.text = "@" + username
+        }
+        self.tweetText.text = tweet.text
+        //        self.retweetCount.text = String(tweet.retweetCount!)
+        //        self.favoriteCount.text = String(tweet.favoriteCount!)
     }
 
     override func didReceiveMemoryWarning() {
@@ -21,7 +38,10 @@ class TweetDetailsViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
+    func setTweet(tweet: Tweet) {
+        self.tweet = tweet
+    }
+    
     /*
     // MARK: - Navigation
 

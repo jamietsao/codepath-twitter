@@ -38,7 +38,7 @@ class ComposeTweetViewController: UIViewController, UITextViewDelegate {
         if let user = User.currentUser {
             self.profileImage.setImageWithURL(NSURL(string: user.profileImageUrl))
             self.name.text = user.name
-            self.username.text = user.username
+            self.username.text = "@" + user.username
         }
         
         tweetText.delegate = self

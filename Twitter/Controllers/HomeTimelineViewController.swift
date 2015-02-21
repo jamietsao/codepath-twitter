@@ -63,7 +63,12 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("TweetDetailsViewController") as UIViewController
+        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("TweetDetailsViewController") as TweetDetailsViewController
+        
+        // get tweet for this row and set it in VC
+        let tweet = tweets[indexPath.row]
+        vc.setTweet(tweet)
+        
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

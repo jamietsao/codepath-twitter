@@ -44,7 +44,9 @@ class TweetCell: UITableViewCell {
             self.profileImageUrl.setImageWithURL(NSURL(string: url))
         }
         self.name.text = tweet.user?.name
-        self.username.text = tweet.user?.username
+        if let username = tweet.user?.username {
+            self.username.text = "@" + username
+        }
         self.tweetText.text = tweet.text
         self.retweetCount.text = String(tweet.retweetCount!)
         self.favoriteCount.text = String(tweet.favoriteCount!)
