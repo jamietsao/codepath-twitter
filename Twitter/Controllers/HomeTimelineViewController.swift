@@ -58,6 +58,8 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
         cell.name.text = tweet.user?.name
         cell.username.text = tweet.user?.username
         cell.tweetText.text = tweet.text
+        cell.retweetCount.text = String(tweet.retweetCount!)
+        cell.favoriteCount.text = String(tweet.favoriteCount!)
         return cell
     }
 

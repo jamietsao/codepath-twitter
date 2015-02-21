@@ -15,6 +15,8 @@ class TweetCell: UITableViewCell {
     @IBOutlet weak var username: UILabel!
     @IBOutlet weak var tweetText: UILabel!
     @IBOutlet weak var createdAt: UILabel!
+    @IBOutlet weak var retweetCount: UILabel!
+    @IBOutlet weak var favoriteCount: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
