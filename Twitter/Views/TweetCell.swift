@@ -52,27 +52,57 @@ class TweetCell: UITableViewCell {
     func setTweet(tweet: Tweet) {
         self.tweet = tweet
         
+        // profile image
         if let url = tweet.user?.profileImageUrl? {
             self.profileImage.setImageWithURL(NSURL(string: url))
         }
+
+        // name
         self.name.text = tweet.user?.name
+        
+        // username
         if let username = tweet.user?.username {
             self.username.text = "@" + username
         }
+        
+        // tweet
         self.tweetText.text = tweet.text
+        
+        // relative created date
         self.createdAt.text = tweet.getCreatedAtRelativeDisplay()
+        
+        // retweet info
         if tweet.retweeted! {
             self.retweetImage.image = UIImage(named: "Retweeted")
         } else {
             self.retweetImage.image = UIImage(named: "Retweet")
         }
-        self.retweetCount.text = String(tweet.retweetCount!)
+        // if own tweet, reduce alpha to indicate that you can't retweet own tweet
+        if tweet.isOwnTweet() {
+            self.retweetImage.alpha = 0.2
+        }
+        if tweet.retweetCount == 0 {
+            // don't show 0's
+            self.retweetCount.hidden = true
+        } else {
+            self.retweetCount.hidden = false
+            self.retweetCount.text = String(tweet.retweetCount!)
+        }
+
+        // favorite info
         if tweet.favorited! {
             self.favoriteImage.image = UIImage(named: "Favorited")
         } else {
             self.favoriteImage.image = UIImage(named: "Favorite")
         }
-        self.favoriteCount.text = String(tweet.favoriteCount!)
+        if tweet.favoriteCount == 0 {
+            // don't show 0's
+            self.favoriteCount.hidden = true
+        } else {
+            self.favoriteCount.hidden = false
+            self.favoriteCount.text = String(tweet.favoriteCount!)
+        }
+        
     }
     
 }

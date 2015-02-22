@@ -29,22 +29,38 @@ class TweetDetailsViewController: UIViewController {
         self.profileImage.layer.cornerRadius = 3
         self.profileImage.clipsToBounds = true
 
-        // set up values
+        // profile image
         if let url = tweet.user?.profileImageUrl? {
             self.profileImage.setImageWithURL(NSURL(string: url))
         }
+        
+        // name
         self.name.text = tweet.user?.name
+        
+        // username
         if let username = tweet.user?.username {
             self.username.text = "@" + username
         }
+        
+        // tweet
         self.tweetText.text = tweet.text
+        
+        // created date
         self.createdAt.text = tweet.getCreatedAtDisplay()
+        
+        // retweet info
         if tweet.retweeted! {
             self.retweetImage.image = UIImage(named: "Retweeted")
         } else {
             self.retweetImage.image = UIImage(named: "Retweet")
         }
+        // if own tweet, reduce alpha to indicate that you can't retweet own tweet
+        if tweet.isOwnTweet() {
+            self.retweetImage.alpha = 0.2
+        }
         self.retweetCount.text = String(tweet.retweetCount!)
+        
+        // favorite info
         if tweet.favorited! {
             self.favoriteImage.image = UIImage(named: "Favorited")
         } else {

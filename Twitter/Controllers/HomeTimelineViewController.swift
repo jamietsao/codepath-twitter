@@ -62,12 +62,12 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
             var indexPath = tableView.indexPathForRowAtPoint(point)
             var cell = tableView.cellForRowAtIndexPath(indexPath!) as TweetCell
             
+            // get associated tweet
+            var thisTweet = self.tweets[indexPath!.row]
+            
             // perform appropriate action
             var pointInCell = gestureRecognizer.locationInView(cell)
             if CGRectContainsPoint(cell.replyImage.frame, pointInCell) {
-
-                // get tweet
-                var thisTweet = self.tweets[indexPath!.row]
 
                 // get nav controller of the compose view
                 let composeNC = self.storyboard?.instantiateViewControllerWithIdentifier("ComposeTweetNavigationController") as
@@ -82,35 +82,40 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
                 self.navigationController?.presentViewController(composeNC, animated: true, completion: nil)
                 
             } else if CGRectContainsPoint(cell.retweetImage.frame, pointInCell) {
-                // display action sheet to confirm retweet
-                var alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
-
-                // cancel action
-                alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
                 
-                // reweet action
-                alertController.addAction(UIAlertAction(title: "Retweet", style: .Default,
-                    handler: { (action: UIAlertAction!) -> Void in
-                        var thisTweet = self.tweets[indexPath!.row]
-                        if thisTweet.retweeted! {
-                        } else {
-                            // retweet
-                            TwitterClient.sharedInstance.statusRetweet(cell.tweet.id!, onComplete: { (tweet, error) -> Void in
-                                if error == nil {
-                                    // update retweet data in local copy and reload cell
-                                    self.tweets[indexPath!.row].retweeted = true
-                                    self.tweets[indexPath!.row].retweetCount! += 1
-                                    tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
-                                }
-                            })
-                        }
-                }))
+                // only allow retweet if not own tweet
+                if !thisTweet.isOwnTweet() {
                 
-                self.presentViewController(alertController, animated: true, completion: nil)
+                    // display action sheet to confirm retweet
+                    var alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+                    
+                    // cancel action
+                    alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+                    
+                    // reweet action
+                    alertController.addAction(UIAlertAction(title: "Retweet", style: .Default,
+                        handler: { (action: UIAlertAction!) -> Void in
+                            if thisTweet.retweeted! {
+                                // TODO
+                            } else {
+                                // retweet
+                                TwitterClient.sharedInstance.statusRetweet(cell.tweet.id!, onComplete: { (tweet, error) -> Void in
+                                    if error == nil {
+                                        // update retweet data in local copy and reload cell
+                                        self.tweets[indexPath!.row].retweeted = true
+                                        self.tweets[indexPath!.row].retweetCount! += 1
+                                        tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
+                                    }
+                                })
+                            }
+                    }))
+                    
+                    // present action sheet
+                    self.presentViewController(alertController, animated: true, completion: nil)
+                }
                 
             } else if CGRectContainsPoint(cell.favoriteImage.frame, pointInCell) {
                 
-                var thisTweet = self.tweets[indexPath!.row]
                 if thisTweet.favorited! {
                     // unfavorite
                     TwitterClient.sharedInstance.favoriteDestroy(cell.tweet.id!, onComplete: { (tweet, error) -> Void in

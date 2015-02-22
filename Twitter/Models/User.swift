@@ -39,12 +39,14 @@ class User {
     }
 
     var dict: NSDictionary
+    var id: String!
     var name: String!
     var username: String!
     var profileImageUrl: String!
     
     init(dict: NSDictionary) {
         self.dict = dict
+        id = dict["id_str"] as? String
         name = dict["name"] as? String
         username = dict["screen_name"] as? String
         profileImageUrl = dict["profile_image_url"] as? String

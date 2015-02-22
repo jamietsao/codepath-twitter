@@ -19,14 +19,6 @@ class Tweet {
     var favoriteCount: Int?
     var createdAt: NSDate?
 
-    init(user: User, text: String) {
-        self.user = user
-        self.text = text
-        self.retweetCount = 0
-        self.favoriteCount = 0
-        self.createdAt = NSDate()
-    }
-    
     init(dict: NSDictionary) {
         user = User(dict: dict["user"] as NSDictionary)
         id = dict["id_str"] as? String
@@ -48,6 +40,13 @@ class Tweet {
             tweets.append(Tweet(dict: dict))
         }
         return tweets
+    }
+    
+    func isOwnTweet() -> Bool {
+        if let userId = self.user?.id {
+            return userId == User.currentUser?.id
+        }
+        return false
     }
     
     func getCreatedAtDisplay() -> String {
