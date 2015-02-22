@@ -15,6 +15,10 @@ protocol ComposeTweetViewDelegate: class {
 
 class ComposeTweetViewController: UIViewController, UITextViewDelegate {
 
+    // in reply to tweet (nil if composing new tweet)
+    var replyToTweet: Tweet!
+    var replyToTweetId: String!
+    
     // delegate
     weak var delegate: ComposeTweetViewDelegate?
     
@@ -46,6 +50,15 @@ class ComposeTweetViewController: UIViewController, UITextViewDelegate {
             self.username.text = "@" + user.username
         }
         
+        // if replying, start tweet text with username of tweet author
+        if replyToTweet != nil {
+            if let username = replyToTweet.user?.username {
+                self.whatsHappening.hidden = true
+                self.tweetText.text = "@" + username + " "
+                self.tweetText.becomeFirstResponder()
+            }
+        }
+        
         tweetText.delegate = self
     }
 
@@ -59,9 +72,9 @@ class ComposeTweetViewController: UIViewController, UITextViewDelegate {
     
     func onTweet() {
         // handler
-        func onComplete(error: NSError!) -> Void {
+        func onComplete(tweet: Tweet!, error: NSError!) -> Void {
             if error == nil {
-                self.delegate?.composeTweetView(self, didTweet: Tweet(user: User.currentUser!, text: tweetText.text))
+                self.delegate?.composeTweetView(self, didTweet: tweet)
             } else {
                 // TODO
             }
@@ -71,14 +84,8 @@ class ComposeTweetViewController: UIViewController, UITextViewDelegate {
         TwitterClient.sharedInstance.statusUpdate(tweetText.text, onComplete)
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func setReplyToTweet(tweet: Tweet) {
+        self.replyToTweet = tweet;
+        self.replyToTweetId = tweet.id
     }
-    */
-
 }

@@ -25,7 +25,7 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
 
     func getHomeTimeline(onComplete: (tweets: [Tweet]!, error: NSError!) -> Void) {
         // set up params
-        let params = [ "count" : "200" ]
+        let params = [ "count" : "50" ]
 
         TwitterClient.sharedInstance.GET("1.1/statuses/home_timeline.json", parameters: params,
             success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
@@ -40,7 +40,7 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
         )
     }
 
-    func statusUpdate(tweet: String, onComplete: (error: NSError!) -> Void) {
+    func statusUpdate(tweet: String, onComplete: (tweet: Tweet!, error: NSError!) -> Void) {
         // set up params
         let params = [ "status" : tweet ]
         
@@ -48,11 +48,12 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
         TwitterClient.sharedInstance.POST("1.1/statuses/update.json", parameters: params,
             success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
                 NSLog("Status update successful: \(response)")
-                onComplete(error: nil)
+                var tweet = Tweet(dict: response as NSDictionary)
+                onComplete(tweet: tweet, error: nil)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
                 NSLog("Error while creating a tweet: \(error)")
-                onComplete(error: error)
+                onComplete(tweet: nil, error: error)
             }
         )
     }

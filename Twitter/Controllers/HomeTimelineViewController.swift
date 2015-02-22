@@ -65,6 +65,21 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
             // perform appropriate action
             var pointInCell = gestureRecognizer.locationInView(cell)
             if CGRectContainsPoint(cell.replyImage.frame, pointInCell) {
+
+                // get tweet
+                var thisTweet = self.tweets[indexPath!.row]
+
+                // get nav controller of the compose view
+                let composeNC = self.storyboard?.instantiateViewControllerWithIdentifier("ComposeTweetNavigationController") as
+                UINavigationController
+                
+                // set the delegate of the ComposeTweetViewController to self
+                // TODO: this line seems hacky and dangerous - IS THERE A BETTER WAY??
+                (composeNC.viewControllers[0] as ComposeTweetViewController).delegate = self
+                (composeNC.viewControllers[0] as ComposeTweetViewController).setReplyToTweet(thisTweet)
+                
+                // present modally
+                self.navigationController?.presentViewController(composeNC, animated: true, completion: nil)
                 
             } else if CGRectContainsPoint(cell.retweetImage.frame, pointInCell) {
                 // display action sheet to confirm retweet
