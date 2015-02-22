@@ -15,8 +15,12 @@ class TweetDetailsViewController: UIViewController {
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var username: UILabel!
-    @IBOutlet weak var tweetText: UITextView!
+    @IBOutlet weak var tweetText: UILabel!
     @IBOutlet weak var createdAt: UILabel!
+    @IBOutlet weak var retweetCount: UILabel!
+    @IBOutlet weak var favoriteCount: UILabel!
+    @IBOutlet weak var retweetImage: UIImageView!
+    @IBOutlet weak var favoriteImage: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,8 +33,19 @@ class TweetDetailsViewController: UIViewController {
             self.username.text = "@" + username
         }
         self.tweetText.text = tweet.text
-        //        self.retweetCount.text = String(tweet.retweetCount!)
-        //        self.favoriteCount.text = String(tweet.favoriteCount!)
+        if tweet.retweeted! {
+            self.retweetImage.image = UIImage(named: "Retweeted")
+        } else {
+            self.retweetImage.image = UIImage(named: "Retweet")
+        }
+        self.retweetCount.text = String(tweet.retweetCount!)
+        if tweet.favorited! {
+            self.favoriteImage.image = UIImage(named: "Favorited")
+        } else {
+            self.favoriteImage.image = UIImage(named: "Favorite")
+        }
+        self.favoriteCount.text = String(tweet.favoriteCount!)
+        
     }
 
     override func didReceiveMemoryWarning() {

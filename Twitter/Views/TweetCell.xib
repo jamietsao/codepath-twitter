@@ -119,9 +119,12 @@
             <connections>
                 <outlet property="createdAt" destination="Bzk-YQ-WEX" id="gyX-XG-s2V"/>
                 <outlet property="favoriteCount" destination="1I6-Fz-58y" id="wvf-lc-eb5"/>
+                <outlet property="favoriteImage" destination="Bsy-to-BYg" id="ltd-Jd-C7b"/>
                 <outlet property="name" destination="Fhb-A7-ZZC" id="K9N-tD-Flx"/>
                 <outlet property="profileImageUrl" destination="bOc-R3-qyK" id="Akc-MU-HTL"/>
+                <outlet property="replyImage" destination="WxB-jE-oui" id="rpy-Bb-T8s"/>
                 <outlet property="retweetCount" destination="ins-E5-Ad1" id="XAt-5s-Ir3"/>
+                <outlet property="retweetImage" destination="B4D-9i-mWo" id="0Bs-jY-inN"/>
                 <outlet property="tweetText" destination="pg0-bw-Mqf" id="6ru-3V-kSY"/>
                 <outlet property="username" destination="hNz-qk-yoC" id="VTN-al-4zu"/>
             </connections>

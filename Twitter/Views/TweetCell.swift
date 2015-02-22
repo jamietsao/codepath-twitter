@@ -10,19 +10,27 @@ import UIKit
 
 class TweetCell: UITableViewCell {
 
-    private var tweet: Tweet!
+    var tweet: Tweet!
     
     @IBOutlet weak var profileImageUrl: UIImageView!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var username: UILabel!
     @IBOutlet weak var tweetText: UILabel!
     @IBOutlet weak var createdAt: UILabel!
+    @IBOutlet weak var replyImage: UIImageView!
+    @IBOutlet weak var retweetImage: UIImageView!
     @IBOutlet weak var retweetCount: UILabel!
+    @IBOutlet weak var favoriteImage: UIImageView!
     @IBOutlet weak var favoriteCount: UILabel!
+
+    
+    @IBAction func onTap(sender: AnyObject) {
+        println("Tapped!")
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
-
+        
         self.tweetText.preferredMaxLayoutWidth = self.tweetText.frame.size.width
     }
 
@@ -48,7 +56,17 @@ class TweetCell: UITableViewCell {
             self.username.text = "@" + username
         }
         self.tweetText.text = tweet.text
+        if tweet.retweeted! {
+            self.retweetImage.image = UIImage(named: "Retweeted")
+        } else {
+            self.retweetImage.image = UIImage(named: "Retweet")
+        }
         self.retweetCount.text = String(tweet.retweetCount!)
+        if tweet.favorited! {
+            self.favoriteImage.image = UIImage(named: "Favorited")
+        } else {
+            self.favoriteImage.image = UIImage(named: "Favorite")
+        }
         self.favoriteCount.text = String(tweet.favoriteCount!)
     }
     

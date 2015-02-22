@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ComposeTweetViewDelegate {
+class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, UIActionSheetDelegate, ComposeTweetViewDelegate {
 
     var tweets: [Tweet] = []
 
@@ -34,6 +34,12 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
         // register custom cells
         var cellNib = UINib(nibName: "TweetCell", bundle: NSBundle.mainBundle())
         tableView.registerNib(cellNib, forCellReuseIdentifier: "TweetCell")
+
+        var tap = UITapGestureRecognizer(target: self, action: "onTap:")
+        tap.delegate = self
+        tap.numberOfTapsRequired = 1
+        tap.numberOfTouchesRequired = 1
+        self.tableView.addGestureRecognizer(tap)
         
         // load tweets
         loadTweets(refreshing: false)
@@ -46,6 +52,92 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
     func onRefresh() {
         // load tweets
         loadTweets(refreshing: true)
+    }
+
+    func onTap(gestureRecognizer: UIGestureRecognizer) {
+        if gestureRecognizer.state == UIGestureRecognizerState.Ended {
+            // get tapped cell
+            var tableView = gestureRecognizer.view as UITableView
+            var point = gestureRecognizer.locationInView(tableView)
+            var indexPath = tableView.indexPathForRowAtPoint(point)
+            var cell = tableView.cellForRowAtIndexPath(indexPath!) as TweetCell
+            
+            // perform appropriate action
+            var pointInCell = gestureRecognizer.locationInView(cell)
+            if CGRectContainsPoint(cell.replyImage.frame, pointInCell) {
+                
+            } else if CGRectContainsPoint(cell.retweetImage.frame, pointInCell) {
+                // display action sheet to confirm retweet
+                var alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+
+                // cancel action
+                alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+                
+                // reweet action
+                alertController.addAction(UIAlertAction(title: "Retweet", style: .Default,
+                    handler: { (action: UIAlertAction!) -> Void in
+                        var thisTweet = self.tweets[indexPath!.row]
+                        if thisTweet.retweeted! {
+                        } else {
+                            // retweet
+                            TwitterClient.sharedInstance.statusRetweet(cell.tweet.id!, onComplete: { (tweet, error) -> Void in
+                                if error == nil {
+                                    // update retweet data in local copy and reload cell
+                                    self.tweets[indexPath!.row].retweeted = true
+                                    self.tweets[indexPath!.row].retweetCount! += 1
+                                    tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
+                                }
+                            })
+                        }
+                }))
+                
+                self.presentViewController(alertController, animated: true, completion: nil)
+                
+            } else if CGRectContainsPoint(cell.favoriteImage.frame, pointInCell) {
+                
+                var thisTweet = self.tweets[indexPath!.row]
+                if thisTweet.favorited! {
+                    // unfavorite
+                    TwitterClient.sharedInstance.favoriteDestroy(cell.tweet.id!, onComplete: { (tweet, error) -> Void in
+                        // update favorite data in local copy and reload cell
+                        thisTweet.favorited = false
+                        thisTweet.favoriteCount! -= 1
+                        tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
+                    })
+                    
+                } else {
+                    // favorite
+                    TwitterClient.sharedInstance.favoriteCreate(cell.tweet.id!, onComplete: { (tweet, error) -> Void in
+                        // update favorite data in local copy and reload cell
+                        thisTweet.favorited = true
+                        thisTweet.favoriteCount! += 1
+                        tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
+                    })
+                }
+                
+            } else {
+                // should never happen
+                NSLog("Unrecognized area tapped!")
+            }
+        }
+    }
+    
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
+        // get tapped cell
+        var tableView = gestureRecognizer.view as UITableView
+        var point = touch.locationInView(tableView)
+        let indexPath = tableView.indexPathForRowAtPoint(point)
+        let cell = tableView.cellForRowAtIndexPath(indexPath!) as TweetCell
+        
+        // only handle tap gesture if reply/retweet/favorite images were tapped
+        point = touch.locationInView(cell)
+        if CGRectContainsPoint(cell.replyImage.frame, point) ||
+           CGRectContainsPoint(cell.retweetImage.frame, point) ||
+           CGRectContainsPoint(cell.favoriteImage.frame, point) {
+            return true
+        } else {
+            return false
+        }
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -64,34 +156,15 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let vc = self.storyboard?.instantiateViewControllerWithIdentifier("TweetDetailsViewController") as TweetDetailsViewController
+
+        self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
         // get tweet for this row and set it in VC
         let tweet = tweets[indexPath.row]
         vc.setTweet(tweet)
+
         
         self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    
-    func loadTweets(refreshing refresh: Bool) {
-        // show progress HUD before invoking API call
-        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        
-        // load latest home timeline
-        TwitterClient.sharedInstance.getHomeTimeline { (tweets, error) -> Void in
-            if error == nil {
-                //                self.networkErrorLabel.hidden = true
-                self.tweets = tweets
-                if refresh {
-                    self.refreshControl.endRefreshing()
-                }
-                MBProgressHUD.hideHUDForView(self.view, animated: true)
-                self.tableView.reloadData()
-            } else {
-                NSLog("Failed to retrieve tweets: \(error)")
-                // TODO: display error
-            }
-        }
     }
     
     @IBAction func onCompose(sender: AnyObject) {
@@ -121,4 +194,26 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
         
         self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
+    
+    func loadTweets(refreshing refresh: Bool) {
+        // show progress HUD before invoking API call
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        
+        // load latest home timeline
+        TwitterClient.sharedInstance.getHomeTimeline { (tweets, error) -> Void in
+            if error == nil {
+                //                self.networkErrorLabel.hidden = true
+                self.tweets = tweets
+                if refresh {
+                    self.refreshControl.endRefreshing()
+                }
+                MBProgressHUD.hideHUDForView(self.view, animated: true)
+                self.tableView.reloadData()
+            } else {
+                NSLog("Failed to retrieve tweets: \(error)")
+                // TODO: display error
+            }
+        }
+    }
+    
 }

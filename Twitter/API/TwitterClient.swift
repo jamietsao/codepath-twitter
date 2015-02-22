@@ -23,25 +23,10 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
     // REST API (https://dev.twitter.com/rest/public)
     //
 
-    func statusUpdate(tweet: String, onComplete: (error: NSError!) -> Void) {
-        // set up params
-        let params = [ "status" : tweet ]
-        
-        // invoke API
-        TwitterClient.sharedInstance.POST("1.1/statuses/update.json", parameters: params,
-            success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
-                onComplete(error: nil)
-            },
-            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
-                NSLog("Error while POSTing status update: \(error)")
-                onComplete(error: error)
-            }
-        )
-    }
-    
     func getHomeTimeline(onComplete: (tweets: [Tweet]!, error: NSError!) -> Void) {
         TwitterClient.sharedInstance.GET("1.1/statuses/home_timeline.json", parameters: nil,
             success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+                println("\(response as [NSDictionary])")
                 var tweets = Tweet.tweetsFromArray(response as [NSDictionary])
                 onComplete(tweets: tweets, error: nil)
             },
@@ -51,6 +36,75 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
             }
         )
     }
+
+    func statusUpdate(tweet: String, onComplete: (error: NSError!) -> Void) {
+        // set up params
+        let params = [ "status" : tweet ]
+        
+        // invoke API
+        TwitterClient.sharedInstance.POST("1.1/statuses/update.json", parameters: params,
+            success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+                NSLog("Status update successful: \(response)")
+                onComplete(error: nil)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+                NSLog("Error while creating a tweet: \(error)")
+                onComplete(error: error)
+            }
+        )
+    }
+
+    func statusRetweet(tweetId: String, onComplete: (tweet: Tweet!, error: NSError!) -> Void) {
+        // invoke API
+        TwitterClient.sharedInstance.POST("1.1/statuses/retweet/\(tweetId).json", parameters: nil,
+            success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+                NSLog("Retweet successful: \(response as NSDictionary)")
+                var tweet = Tweet(dict: response as NSDictionary)
+                onComplete(tweet: tweet, error: nil)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+                NSLog("Error while retweeting a tweet: \(error)")
+                onComplete(tweet: nil, error: error)
+            }
+        )
+    }
+
+    func favoriteCreate(tweetId: String, onComplete: (tweet: Tweet!, error: NSError!) -> Void) {
+        // set up params
+        let params = [ "id" : tweetId ]
+
+        // invoke API
+        TwitterClient.sharedInstance.POST("1.1/favorites/create.json", parameters: params,
+            success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+                NSLog("Sucess while favoriting a tweet: \(response as NSDictionary)")
+                var tweet = Tweet(dict: response as NSDictionary)
+                onComplete(tweet: tweet, error: nil)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+                NSLog("Error while favoriting a tweet: \(error)")
+                onComplete(tweet: nil, error: error)
+            }
+        )
+    }
+
+    func favoriteDestroy(tweetId: String, onComplete: (tweet: Tweet!, error: NSError!) -> Void) {
+        // set up params
+        let params = [ "id" : tweetId ]
+        
+        // invoke API
+        TwitterClient.sharedInstance.POST("1.1/favorites/destroy.json", parameters: params,
+            success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+                NSLog("Success while unfavoriting a tweet: \(response as NSDictionary)")
+                var tweet = Tweet(dict: response as NSDictionary)
+                onComplete(tweet: tweet, error: nil)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+                NSLog("Error while unfavoriting a tweet: \(error)")
+                onComplete(tweet: nil, error: error)
+            }
+        )
+    }
+    
     
     //
     // OAuth 1.0a

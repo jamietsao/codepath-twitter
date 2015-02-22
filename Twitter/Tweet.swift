@@ -11,8 +11,11 @@ import Foundation
 class Tweet {
     
     var user: User?
+    var id: String?
     var text: String?
+    var retweeted: Bool?
     var retweetCount: Int?
+    var favorited: Bool?
     var favoriteCount: Int?
     var createdAt: NSDate?
 
@@ -26,8 +29,11 @@ class Tweet {
     
     init(dict: NSDictionary) {
         user = User(dict: dict["user"] as NSDictionary)
+        id = dict["id_str"] as? String
         text = dict["text"] as? String
+        retweeted = dict["retweeted"] as? Bool
         retweetCount = dict["retweet_count"] as? Int
+        favorited = dict["favorited"] as? Bool
         favoriteCount = dict["favorite_count"] as? Int
         
         // date format: Mon Jan 26 15:24:26 +0000 2009
