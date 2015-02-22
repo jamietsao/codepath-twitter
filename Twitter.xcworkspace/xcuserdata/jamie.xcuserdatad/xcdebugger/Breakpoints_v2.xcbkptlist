@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Twitter/Controllers/ComposeTweetViewController.swift"
-            timestampString = "446243864.41127"
+            timestampString = "446317413.187911"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
             landmarkName = "onTweet()"
             landmarkType = "5">
          </BreakpointContent>

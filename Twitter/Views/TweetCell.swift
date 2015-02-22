@@ -12,7 +12,7 @@ class TweetCell: UITableViewCell {
 
     var tweet: Tweet!
     
-    @IBOutlet weak var profileImageUrl: UIImageView!
+    @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var username: UILabel!
     @IBOutlet weak var tweetText: UILabel!
@@ -30,7 +30,11 @@ class TweetCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+
+        // rounded corners for profile image
+        self.profileImage.layer.cornerRadius = 3
+        self.profileImage.clipsToBounds = true
+
         self.tweetText.preferredMaxLayoutWidth = self.tweetText.frame.size.width
     }
 
@@ -49,13 +53,14 @@ class TweetCell: UITableViewCell {
         self.tweet = tweet
         
         if let url = tweet.user?.profileImageUrl? {
-            self.profileImageUrl.setImageWithURL(NSURL(string: url))
+            self.profileImage.setImageWithURL(NSURL(string: url))
         }
         self.name.text = tweet.user?.name
         if let username = tweet.user?.username {
             self.username.text = "@" + username
         }
         self.tweetText.text = tweet.text
+        self.createdAt.text = tweet.getCreatedAtRelativeDisplay()
         if tweet.retweeted! {
             self.retweetImage.image = UIImage(named: "Retweeted")
         } else {

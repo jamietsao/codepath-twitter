@@ -25,6 +25,11 @@ class TweetDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // rounded corners for profile image
+        self.profileImage.layer.cornerRadius = 3
+        self.profileImage.clipsToBounds = true
+
+        // set up values
         if let url = tweet.user?.profileImageUrl? {
             self.profileImage.setImageWithURL(NSURL(string: url))
         }
@@ -33,6 +38,7 @@ class TweetDetailsViewController: UIViewController {
             self.username.text = "@" + username
         }
         self.tweetText.text = tweet.text
+        self.createdAt.text = tweet.getCreatedAtDisplay()
         if tweet.retweeted! {
             self.retweetImage.image = UIImage(named: "Retweeted")
         } else {

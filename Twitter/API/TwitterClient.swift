@@ -24,7 +24,10 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
     //
 
     func getHomeTimeline(onComplete: (tweets: [Tweet]!, error: NSError!) -> Void) {
-        TwitterClient.sharedInstance.GET("1.1/statuses/home_timeline.json", parameters: nil,
+        // set up params
+        let params = [ "count" : "200" ]
+
+        TwitterClient.sharedInstance.GET("1.1/statuses/home_timeline.json", parameters: params,
             success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
                 println("\(response as [NSDictionary])")
                 var tweets = Tweet.tweetsFromArray(response as [NSDictionary])

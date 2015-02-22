@@ -34,7 +34,12 @@ class ComposeTweetViewController: UIViewController, UITextViewDelegate {
         tweetButton.tintColor = UIColor.whiteColor()
         navigationItem.leftBarButtonItem = cancelButton
         navigationItem.rightBarButtonItem = tweetButton
-        
+
+        // rounded corners for profile image
+        self.profileImage.layer.cornerRadius = 3
+        self.profileImage.clipsToBounds = true
+
+        // set values from current user
         if let user = User.currentUser {
             self.profileImage.setImageWithURL(NSURL(string: user.profileImageUrl))
             self.name.text = user.name

@@ -50,4 +50,34 @@ class Tweet {
         return tweets
     }
     
+    func getCreatedAtDisplay() -> String {
+        var formatter = NSDateFormatter()
+        formatter.dateStyle = NSDateFormatterStyle.ShortStyle
+        formatter.timeStyle = NSDateFormatterStyle.ShortStyle
+        return formatter.stringFromDate(self.createdAt!)
+    }
+    
+    func getCreatedAtRelativeDisplay() -> String {
+        // get elapsed durations
+        let elapsed = Int(NSDate().timeIntervalSinceDate(self.createdAt!))
+        let days: Int = elapsed / 86400
+        let hours: Int = elapsed / 3600
+        let minutes: Int = elapsed / 60
+        
+        if days > 6 {
+            // show date if beyond 6 days
+            var formatter = NSDateFormatter()
+            formatter.dateStyle = NSDateFormatterStyle.ShortStyle
+            return formatter.stringFromDate(self.createdAt!)
+        } else if days > 0 {
+            return "\(days)d"
+        } else if hours > 0 {
+            return "\(hours)h"
+        } else if minutes > 0 {
+            return "\(minutes)m"
+        } else {
+            return "\(elapsed)s"
+        }
+    }
+    
 }
