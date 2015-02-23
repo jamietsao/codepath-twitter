@@ -69,7 +69,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="od1-r9-boR">
-                        <barButtonItem key="rightBarButtonItem" title="Compose" id="A0b-fv-lKm">
+                        <barButtonItem key="rightBarButtonItem" systemItem="compose" id="A0b-fv-lKm">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="onCompose:" destination="J1R-op-MjB" id="YZ9-dG-C7W"/>
@@ -110,10 +110,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Jamie Tsao retweeted" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KCT-9E-iZI">
-                                <rect key="frame" x="72" y="78" width="200" height="13.5"/>
+                                <rect key="frame" x="72" y="80" width="232" height="10"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="13.5" id="JX4-hZ-ITs"/>
-                                    <constraint firstAttribute="width" constant="200" id="wDP-Dy-DGb"/>
+                                    <constraint firstAttribute="height" constant="10" id="JX4-hZ-ITs"/>
+                                    <constraint firstAttribute="width" constant="232" id="wDP-Dy-DGb"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -171,17 +171,13 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Retweet" translatesAutoresizingMaskIntoConstraints="NO" id="UJ9-iy-AIO">
                                 <rect key="frame" x="108" y="300" width="20" height="20"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="4M3-PH-OTJ"/>
                                     <constraint firstAttribute="height" constant="20" id="UF6-VQ-vZi"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="Uf4-ap-Ie0"/>
                                     <constraint firstAttribute="width" constant="20" id="emu-Az-aUA"/>
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Favorite" translatesAutoresizingMaskIntoConstraints="NO" id="pt8-OU-yaN">
                                 <rect key="frame" x="184" y="300" width="20" height="20"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="agn-SS-AIM"/>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="eon-j1-3BB"/>
                                     <constraint firstAttribute="height" constant="20" id="iSc-ok-bgY"/>
                                     <constraint firstAttribute="width" constant="20" id="yVJ-lX-9jX"/>
                                 </constraints>
@@ -194,13 +190,13 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Jamie Tsao" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MvO-sq-25s">
-                                <rect key="frame" x="72" y="97.5" width="69" height="16"/>
+                                <rect key="frame" x="72" y="98" width="69" height="16"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@eimajination" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EoP-YX-YNu">
-                                <rect key="frame" x="72" y="115.5" width="71" height="13.5"/>
+                                <rect key="frame" x="72" y="116" width="71" height="13.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -216,7 +212,7 @@
                             <constraint firstItem="Ofz-PK-jot" firstAttribute="leading" secondItem="J9a-8w-Jfl" secondAttribute="leading" constant="32" id="AiE-LQ-UG9"/>
                             <constraint firstItem="UZp-yb-YaW" firstAttribute="top" secondItem="46u-CF-DdK" secondAttribute="bottom" constant="12" id="BEK-Td-klD"/>
                             <constraint firstItem="UZp-yb-YaW" firstAttribute="leading" secondItem="J9a-8w-Jfl" secondAttribute="leading" constant="16" id="EfZ-VY-Zh2"/>
-                            <constraint firstItem="KCT-9E-iZI" firstAttribute="top" secondItem="GXA-aE-cgM" secondAttribute="bottom" constant="14" id="HLL-Wk-FEI"/>
+                            <constraint firstItem="KCT-9E-iZI" firstAttribute="top" secondItem="GXA-aE-cgM" secondAttribute="bottom" constant="16" id="HLL-Wk-FEI"/>
                             <constraint firstAttribute="trailing" secondItem="UZp-yb-YaW" secondAttribute="trailing" constant="16" id="Heo-iK-skq"/>
                             <constraint firstItem="rdS-zj-doZ" firstAttribute="leading" secondItem="3TW-z7-FVY" secondAttribute="trailing" constant="3" id="KAL-to-QFp"/>
                             <constraint firstItem="pt8-OU-yaN" firstAttribute="top" secondItem="cwX-Ti-hkH" secondAttribute="bottom" constant="12" id="LRY-PQ-bE9"/>
@@ -228,7 +224,7 @@
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Wik-5v-Oi6" secondAttribute="trailing" constant="16" id="fld-zB-QF1"/>
                             <constraint firstItem="3TW-z7-FVY" firstAttribute="top" secondItem="UZp-yb-YaW" secondAttribute="bottom" constant="12" id="hn5-88-C6h"/>
                             <constraint firstItem="pt8-OU-yaN" firstAttribute="leading" secondItem="UJ9-iy-AIO" secondAttribute="trailing" constant="56" id="ima-ga-yez"/>
-                            <constraint firstItem="MvO-sq-25s" firstAttribute="top" secondItem="KCT-9E-iZI" secondAttribute="bottom" constant="6" id="kzG-Wk-ymb"/>
+                            <constraint firstItem="MvO-sq-25s" firstAttribute="top" secondItem="KCT-9E-iZI" secondAttribute="bottom" constant="8" id="kzG-Wk-ymb"/>
                             <constraint firstItem="UJ9-iy-AIO" firstAttribute="leading" secondItem="Ofz-PK-jot" secondAttribute="trailing" constant="56" id="lUg-4w-rnr"/>
                             <constraint firstItem="MvO-sq-25s" firstAttribute="leading" secondItem="0rh-W4-zYF" secondAttribute="trailing" constant="8" id="lpn-tG-MmD"/>
                             <constraint firstItem="Ofz-PK-jot" firstAttribute="top" secondItem="cwX-Ti-hkH" secondAttribute="bottom" constant="12" id="mmh-WR-tEw"/>
@@ -356,7 +352,7 @@
             <objects>
                 <navigationController storyboardIdentifier="HomeTimelineNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="CER-QV-y5p" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Rhh-bp-7GT">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="Rhh-bp-7GT">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.33333333333333331" green="0.67450980392156867" blue="0.93333333333333335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -375,7 +371,7 @@
             <objects>
                 <navigationController storyboardIdentifier="ComposeTweetNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="6fd-qa-eX7" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="phy-qs-Vol">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="phy-qs-Vol">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.33333333333333331" green="0.67450980392156867" blue="0.93333333333333335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -394,9 +390,10 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="wsk-hQ-JC3" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Yuu-jt-iSJ">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="Yuu-jt-iSJ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.33333333333333331" green="0.67450980392156867" blue="0.93333333333333335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>

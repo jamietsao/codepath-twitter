@@ -60,7 +60,7 @@ class Tweet {
         }
         return false
     }
-    
+        
     func getCreatedAtDisplay() -> String {
         var formatter = NSDateFormatter()
         formatter.dateStyle = NSDateFormatterStyle.ShortStyle

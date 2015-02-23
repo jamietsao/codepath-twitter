@@ -34,8 +34,10 @@ class ComposeTweetViewController: UIViewController, UITextViewDelegate {
         // initialize nav bar
         let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Bordered, target: self, action: "onCancel")
         cancelButton.tintColor = UIColor.whiteColor()
+        cancelButton.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14)], forState: UIControlState.Normal)
         let tweetButton = UIBarButtonItem(title: "Tweet", style: UIBarButtonItemStyle.Bordered, target: self, action: "onTweet")
         tweetButton.tintColor = UIColor.whiteColor()
+        tweetButton.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14)], forState: UIControlState.Normal)
         navigationItem.leftBarButtonItem = cancelButton
         navigationItem.rightBarButtonItem = tweetButton
 
@@ -45,7 +47,7 @@ class ComposeTweetViewController: UIViewController, UITextViewDelegate {
 
         // set values from current user
         if let user = User.currentUser {
-            self.profileImage.setImageWithURL(NSURL(string: user.profileImageUrl))
+            self.profileImage.setImageWithURL(NSURL(string: user.getProfileUrlBigger()))
             self.name.text = user.name
             self.username.text = "@" + user.username
         }

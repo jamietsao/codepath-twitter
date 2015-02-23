@@ -19,7 +19,16 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        // customize nav bar & back button
+        self.navigationItem.title = "Home"
+        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+        let backButton = UIBarButtonItem(title: nil, style: .Bordered, target: nil, action: nil)
+        backButton.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14)], forState: UIControlState.Normal)
+        backButton.title = ""
+        self.navigationItem.backBarButtonItem = backButton
+        
+        
         // initialize table view
         tableView.dataSource = self
         tableView.delegate = self

@@ -28,7 +28,9 @@ class TweetDetailsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        self.navigationItem.title = "Tweet"
+        
         // rounded corners for profile image
         self.profileImage.layer.cornerRadius = 3
         self.profileImage.clipsToBounds = true
@@ -49,7 +51,7 @@ class TweetDetailsViewController: UIViewController {
         }
         
         // profile image
-        if let url = displayTweet.user?.profileImageUrl? {
+        if let url = displayTweet.user?.getProfileUrlBigger() {
             self.profileImage.setImageWithURL(NSURL(string: url))
         }
         

@@ -67,7 +67,7 @@ class TweetCell: UITableViewCell {
         }
         
         // profile image
-        if let url = displayTweet.user?.profileImageUrl? {
+        if let url = displayTweet.user?.getProfileUrlBigger() {
             self.profileImage.setImageWithURL(NSURL(string: url))
         }
 

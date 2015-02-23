@@ -51,5 +51,12 @@ class User {
         username = dict["screen_name"] as? String
         profileImageUrl = dict["profile_image_url"] as? String
     }
-    
+
+    func getProfileUrlBigger() -> String {
+        if let url = self.profileImageUrl {
+            return self.profileImageUrl.stringByReplacingOccurrencesOfString("normal", withString: "bigger")
+        }
+        return ""
+    }
+
 }
