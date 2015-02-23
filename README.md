@@ -38,5 +38,8 @@ Time spent: 20 hours
 
 ### Walkthrough
 
-#####  Login Flow & User Persistance Across Restarts
+#####  OAuth Login Flow & User Persistance Across Restarts
 ![OAuthLogin](OAuthLogin.gif)
+
+#####  Basic Features (Home Timeline & Tweet Details)
+![BasicFeatures](BasicFeatures.gif)
