@@ -210,13 +210,10 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func composeTweetView(composeTweetVC: ComposeTweetViewController, didCancel dummy: String) {
-        println("About to dismiss Compose View")
         self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
 
     func composeTweetView(composeTweetVC: ComposeTweetViewController, didTweet tweet: Tweet) {
-        println("Tweet successfully posted - dismissing Compose View")
-        
         // add new tweet to top of timeline before dismissing compose view
         self.tweets.insert(tweet, atIndex: 0)
         self.tableView.reloadData()

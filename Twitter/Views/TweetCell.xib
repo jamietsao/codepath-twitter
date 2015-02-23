@@ -33,7 +33,7 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@TheNextWeb" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hNz-qk-yoC">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="@TheNextWeb" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hNz-qk-yoC">
                         <rect key="frame" x="157" y="27" width="75" height="13.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -117,6 +117,7 @@
                     <constraint firstItem="Fhb-A7-ZZC" firstAttribute="leading" secondItem="bOc-R3-qyK" secondAttribute="trailing" constant="7" id="eud-kZ-aeR"/>
                     <constraint firstItem="1I6-Fz-58y" firstAttribute="leading" secondItem="Bsy-to-BYg" secondAttribute="trailing" constant="2" id="fVg-1y-rcS"/>
                     <constraint firstItem="GVe-Fc-ZFF" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="49" id="gt5-Uj-hvZ"/>
+                    <constraint firstItem="Bzk-YQ-WEX" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="hNz-qk-yoC" secondAttribute="trailing" constant="8" id="hG9-BY-oC9"/>
                     <constraint firstItem="B4D-9i-mWo" firstAttribute="centerY" secondItem="ins-E5-Ad1" secondAttribute="centerY" id="hgx-fo-MMs"/>
                     <constraint firstAttribute="trailing" secondItem="Bzk-YQ-WEX" secondAttribute="trailing" constant="10" id="nKX-3r-kUg"/>
                     <constraint firstItem="pg0-bw-Mqf" firstAttribute="leading" secondItem="bOc-R3-qyK" secondAttribute="trailing" constant="7" id="nR6-Dg-Wfn"/>
