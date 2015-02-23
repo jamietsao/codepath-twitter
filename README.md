@@ -38,4 +38,4 @@ Time spent: 20 hours
 
 ### Walkthrough
 
-![Video Walkthrough](...)
+![OAuth Login Flow & User Persistance Across Restarts](OAuth Login.gif)
