@@ -83,8 +83,12 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
                 
             } else if CGRectContainsPoint(cell.retweetImage.frame, pointInCell) {
                 
-                // only allow retweet if not own tweet
-                if !thisTweet.isOwnTweet() {
+                // TODO:
+                // undo retweet is a bit challenging since I need the id of the retweet, NOT the
+                // tweet that was retweeted which is what's returned in timeline.  No unretweeting for now =(
+                
+                // only allow retweets & only allow if not own tweet
+                if !thisTweet.retweeted! && !thisTweet.isOwnTweet() {
                 
                     // display action sheet to confirm retweet
                     var alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
@@ -95,19 +99,15 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
                     // reweet action
                     alertController.addAction(UIAlertAction(title: "Retweet", style: .Default,
                         handler: { (action: UIAlertAction!) -> Void in
-                            if thisTweet.retweeted! {
-                                // TODO
-                            } else {
-                                // retweet
-                                TwitterClient.sharedInstance.statusRetweet(cell.tweet.id!, onComplete: { (tweet, error) -> Void in
-                                    if error == nil {
-                                        // update retweet data in local copy and reload cell
-                                        self.tweets[indexPath!.row].retweeted = true
-                                        self.tweets[indexPath!.row].retweetCount! += 1
-                                        tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
-                                    }
-                                })
-                            }
+                            // retweet
+                            TwitterClient.sharedInstance.statusRetweet(cell.tweet.id!, onComplete: { (tweet, error) -> Void in
+                                if error == nil {
+                                    // update retweet data in local copy and reload cell
+                                    thisTweet.retweeted = true
+                                    thisTweet.retweetCount! += 1
+                                    tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
+                                }
+                            })
                     }))
                     
                     // present action sheet
@@ -182,7 +182,6 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
         // get tweet for this row and set it in VC
         let tweet = tweets[indexPath.row]
         vc.setTweet(tweet)
-
         
         self.navigationController?.pushViewController(vc, animated: true)
     }

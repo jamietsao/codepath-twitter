@@ -18,6 +18,9 @@ class Tweet {
     var favorited: Bool?
     var favoriteCount: Int?
     var createdAt: NSDate?
+    
+    // if non-nil, this represents the tweet that was retweeted
+    var retweetedTweet: Tweet?
 
     init(dict: NSDictionary) {
         user = User(dict: dict["user"] as NSDictionary)
@@ -32,6 +35,10 @@ class Tweet {
         var formatter = NSDateFormatter()
         formatter.dateFormat = "EEE MMM d HH:mm:ss Z y"
         createdAt = formatter.dateFromString(dict["created_at"] as String)
+        
+        if let retweetedStatus = dict["retweeted_status"] as? NSDictionary {
+            retweetedTweet = Tweet(dict: retweetedStatus)
+        }
     }
 
     class func tweetsFromArray(arr: [NSDictionary]) -> [Tweet] {
@@ -40,6 +47,11 @@ class Tweet {
             tweets.append(Tweet(dict: dict))
         }
         return tweets
+    }
+    
+    func isRetweet() -> Bool {
+        // return true if this is a retweet of another tweet
+        return self.retweetedTweet != nil
     }
     
     func isOwnTweet() -> Bool {

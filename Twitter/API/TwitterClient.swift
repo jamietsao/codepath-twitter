@@ -73,6 +73,21 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
         )
     }
 
+    func statusDestroy(tweetId: String, onComplete: (tweet: Tweet!, error: NSError!) -> Void) {
+        // invoke API
+        TwitterClient.sharedInstance.POST("1.1/statuses/destroy/\(tweetId).json", parameters: nil,
+            success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+                NSLog("Status destroy successful: \(response as NSDictionary)")
+                var tweet = Tweet(dict: response as NSDictionary)
+                onComplete(tweet: tweet, error: nil)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+                NSLog("Error while destroying a tweet: \(error)")
+                onComplete(tweet: nil, error: error)
+            }
+        )
+    }
+
     func favoriteCreate(tweetId: String, onComplete: (tweet: Tweet!, error: NSError!) -> Void) {
         // set up params
         let params = [ "id" : tweetId ]

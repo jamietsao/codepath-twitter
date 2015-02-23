@@ -12,6 +12,7 @@ class TweetCell: UITableViewCell {
 
     var tweet: Tweet!
     
+    @IBOutlet weak var retweetedBy: UILabel!
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var username: UILabel!
@@ -23,11 +24,9 @@ class TweetCell: UITableViewCell {
     @IBOutlet weak var favoriteImage: UIImageView!
     @IBOutlet weak var favoriteCount: UILabel!
 
-    
-    @IBAction func onTap(sender: AnyObject) {
-        println("Tapped!")
-    }
-    
+    @IBOutlet weak var retweetedByImageHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var retweetedByHeightConstraint: NSLayoutConstraint!
+
     override func awakeFromNib() {
         super.awakeFromNib()
 
@@ -45,62 +44,80 @@ class TweetCell: UITableViewCell {
 
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 
     func setTweet(tweet: Tweet) {
         self.tweet = tweet
         
+        // show original tweet info if a retweet
+        var displayTweet = tweet
+        if tweet.isRetweet() {
+            displayTweet = tweet.retweetedTweet!
+
+            // retweeted by user of this tweet
+            if let name = tweet.user?.name {
+                self.retweetedBy.text = name + " retweeted"
+            }
+            self.retweetedByImageHeightConstraint.constant = 10
+            self.retweetedByHeightConstraint.constant = 10
+            
+        } else {
+            self.retweetedByImageHeightConstraint.constant = 0
+            self.retweetedByHeightConstraint.constant = 0
+        }
+        
         // profile image
-        if let url = tweet.user?.profileImageUrl? {
+        if let url = displayTweet.user?.profileImageUrl? {
             self.profileImage.setImageWithURL(NSURL(string: url))
         }
 
         // name
-        self.name.text = tweet.user?.name
+        self.name.text = displayTweet.user?.name
         
         // username
-        if let username = tweet.user?.username {
+        if let username = displayTweet.user?.username {
             self.username.text = "@" + username
         }
         
         // tweet
-        self.tweetText.text = tweet.text
+        self.tweetText.text = displayTweet.text
         
         // relative created date
-        self.createdAt.text = tweet.getCreatedAtRelativeDisplay()
+        self.createdAt.text = displayTweet.getCreatedAtRelativeDisplay()
         
         // retweet info
-        if tweet.retweeted! {
+        if displayTweet.retweeted! {
             self.retweetImage.image = UIImage(named: "Retweeted")
         } else {
             self.retweetImage.image = UIImage(named: "Retweet")
         }
         // if own tweet, reduce alpha to indicate that you can't retweet own tweet
-        if tweet.isOwnTweet() {
+        if displayTweet.isOwnTweet() {
             self.retweetImage.alpha = 0.2
+        } else {
+            self.retweetImage.alpha = 1.0
         }
-        if tweet.retweetCount == 0 {
+        
+        if displayTweet.retweetCount == 0 {
             // don't show 0's
             self.retweetCount.hidden = true
         } else {
             self.retweetCount.hidden = false
-            self.retweetCount.text = String(tweet.retweetCount!)
+            self.retweetCount.text = String(displayTweet.retweetCount!)
         }
 
         // favorite info
-        if tweet.favorited! {
+        if displayTweet.favorited! {
             self.favoriteImage.image = UIImage(named: "Favorited")
         } else {
             self.favoriteImage.image = UIImage(named: "Favorite")
         }
-        if tweet.favoriteCount == 0 {
+        if displayTweet.favoriteCount == 0 {
             // don't show 0's
             self.favoriteCount.hidden = true
         } else {
             self.favoriteCount.hidden = false
-            self.favoriteCount.text = String(tweet.favoriteCount!)
+            self.favoriteCount.text = String(displayTweet.favoriteCount!)
         }
         
     }
