@@ -32,6 +32,9 @@ Time spent: 20 hours
 - [X] Displaying action sheet to confirm retweet or cancel (same as official Twitter app)
 - [X] When composing a new tweet, "What's happening?" is displayed until the first character is typed (same as official Twitter app)
 - [X] When replying to a tweet, focus is immediately put in UITextView via `becomeFirstResponder()`
+- [X] App doesn't allow retweeting of own tweets (same as official Twitter app)
+- [X] Added "Retweeted by" icon and label in tweet cell and details view that works via Autolayout even when not present
+- [X] Compose icon is used in nav bar for composing a tweet
 
 ### Walkthrough
 
