@@ -81,9 +81,9 @@ class ComposeTweetViewController: UIViewController, UITextViewDelegate {
                 // TODO
             }
         }
-        
+
         // POST tweet
-        TwitterClient.sharedInstance.statusUpdate(tweetText.text, onComplete)
+        TwitterClient.sharedInstance.statusUpdate(tweetText.text, replyToId: replyToTweetId, onComplete)
     }
     
     func setReplyToTweet(tweet: Tweet) {

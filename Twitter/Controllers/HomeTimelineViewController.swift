@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, UIActionSheetDelegate, ComposeTweetViewDelegate {
+class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, ComposeTweetViewDelegate {
 
     var tweets: [Tweet] = []
 
@@ -40,16 +40,17 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
         refreshControl.addTarget(self, action: "onRefresh", forControlEvents: UIControlEvents.ValueChanged)
         tableView.insertSubview(refreshControl, atIndex: 0)
 
-        // register custom cells
-        var cellNib = UINib(nibName: "TweetCell", bundle: NSBundle.mainBundle())
-        tableView.registerNib(cellNib, forCellReuseIdentifier: "TweetCell")
-
+        // set up gesture recognizer for reply/retweet/favorite buttons
         var tap = UITapGestureRecognizer(target: self, action: "onTap:")
         tap.delegate = self
         tap.numberOfTapsRequired = 1
         tap.numberOfTouchesRequired = 1
         self.tableView.addGestureRecognizer(tap)
         
+        // register custom cells
+        var cellNib = UINib(nibName: "TweetCell", bundle: NSBundle.mainBundle())
+        tableView.registerNib(cellNib, forCellReuseIdentifier: "TweetCell")
+
         // load tweets
         loadTweets(refreshing: false)
     }

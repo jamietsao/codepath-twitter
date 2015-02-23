@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TweetDetailsViewController: UIViewController {
+class TweetDetailsViewController: UIViewController, UIGestureRecognizerDelegate, ComposeTweetViewDelegate {
 
     private var tweet: Tweet!
     
@@ -20,6 +20,7 @@ class TweetDetailsViewController: UIViewController {
     @IBOutlet weak var createdAt: UILabel!
     @IBOutlet weak var retweetCount: UILabel!
     @IBOutlet weak var favoriteCount: UILabel!
+    @IBOutlet weak var replyImage: UIImageView!
     @IBOutlet weak var retweetImage: UIImageView!
     @IBOutlet weak var favoriteImage: UIImageView!
     
@@ -28,13 +29,26 @@ class TweetDetailsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        // nav bar customization
         self.navigationItem.title = "Tweet"
+
+        // set up gesture recognizer for reply/retweet/favorite buttons
+        var tap = UITapGestureRecognizer(target: self, action: "onTap:")
+        tap.delegate = self
+        tap.numberOfTapsRequired = 1
+        tap.numberOfTouchesRequired = 1
+        self.view.addGestureRecognizer(tap)
         
         // rounded corners for profile image
         self.profileImage.layer.cornerRadius = 3
         self.profileImage.clipsToBounds = true
 
+        // refresh view
+        refreshView()
+    }
+
+    func refreshView() {
         // show original tweet info if a retweet
         var displayTweet = tweet
         if tweet.isRetweet() {
@@ -44,7 +58,7 @@ class TweetDetailsViewController: UIViewController {
             if let name = tweet.user?.name {
                 self.retweetedBy.text = name + " retweeted"
             }
-
+            
         } else {
             self.retweetedByImageHeightContraint.constant = 0
             self.retweetedByHeightContraint.constant = 0
@@ -88,11 +102,100 @@ class TweetDetailsViewController: UIViewController {
             self.favoriteImage.image = UIImage(named: "Favorite")
         }
         self.favoriteCount.text = String(displayTweet.favoriteCount!)
-        
     }
-
+    
     func setTweet(tweet: Tweet) {
         self.tweet = tweet
+    }
+    
+    func onTap(gestureRecognizer: UIGestureRecognizer) {
+        if gestureRecognizer.state == UIGestureRecognizerState.Ended {
+            // get tapped cell
+            var view = gestureRecognizer.view!
+            var point = gestureRecognizer.locationInView(view)
+            
+            // perform appropriate action
+            if CGRectContainsPoint(self.replyImage.frame, point) {
+                
+                // get nav controller of the compose view
+                let composeNC = self.storyboard?.instantiateViewControllerWithIdentifier("ComposeTweetNavigationController") as
+                UINavigationController
+                
+                // set the delegate of the ComposeTweetViewController to self
+                // TODO: this line seems hacky and dangerous - IS THERE A BETTER WAY??
+                (composeNC.viewControllers[0] as ComposeTweetViewController).delegate = self
+                (composeNC.viewControllers[0] as ComposeTweetViewController).setReplyToTweet(self.tweet!)
+                
+                // present modally
+                self.navigationController?.presentViewController(composeNC, animated: true, completion: nil)
+                
+            } else if CGRectContainsPoint(self.retweetImage.frame, point) {
+                
+                // TODO:
+                // undo retweet is a bit challenging since I need the id of the retweet, NOT the
+                // tweet that was retweeted which is what's returned in timeline.  No unretweeting for now =(
+                
+                // only allow retweets & only allow if not own tweet
+                if !tweet.retweeted! && !tweet.isOwnTweet() {
+                    
+                    // display action sheet to confirm retweet
+                    var alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+                    
+                    // cancel action
+                    alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+                    
+                    // reweet action
+                    alertController.addAction(UIAlertAction(title: "Retweet", style: .Default,
+                        handler: { (action: UIAlertAction!) -> Void in
+                            // retweet
+                            TwitterClient.sharedInstance.statusRetweet(self.tweet.id!, onComplete: { (tweet, error) -> Void in
+                                if error == nil {
+                                    // update retweet data in local copy and reload cell
+                                    self.tweet.retweeted = true
+                                    self.tweet.retweetCount! += 1
+                                    self.refreshView()
+                                }
+                            })
+                    }))
+                    
+                    // present action sheet
+                    self.presentViewController(alertController, animated: true, completion: nil)
+                }
+                
+            } else if CGRectContainsPoint(self.favoriteImage.frame, point) {
+                
+                if tweet.favorited! {
+                    // unfavorite
+                    TwitterClient.sharedInstance.favoriteDestroy(self.tweet.id!, onComplete: { (tweet, error) -> Void in
+                        // update favorite data in local copy and reload cell
+                        self.tweet.favorited = false
+                        self.tweet.favoriteCount! -= 1
+                        self.refreshView()
+                    })
+                    
+                } else {
+                    // favorite
+                    TwitterClient.sharedInstance.favoriteCreate(self.tweet.id!, onComplete: { (tweet, error) -> Void in
+                        // update favorite data in local copy and reload cell
+                        self.tweet.favorited = true
+                        self.tweet.favoriteCount! += 1
+                        self.refreshView()
+                    })
+                }
+                
+            } else {
+                // should never happen
+                NSLog("Unrecognized area tapped!")
+            }
+        }
+    }
+    
+    func composeTweetView(composeTweetVC: ComposeTweetViewController, didCancel dummy: String) {
+        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func composeTweetView(composeTweetVC: ComposeTweetViewController, didTweet tweet: Tweet) {
+        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
 }

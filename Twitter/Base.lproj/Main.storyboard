@@ -251,6 +251,7 @@
                         <outlet property="favoriteImage" destination="pt8-OU-yaN" id="SHw-s0-jGE"/>
                         <outlet property="name" destination="MvO-sq-25s" id="aDO-N4-W1i"/>
                         <outlet property="profileImage" destination="0rh-W4-zYF" id="u6d-Yc-uPu"/>
+                        <outlet property="replyImage" destination="Ofz-PK-jot" id="MIY-On-e3o"/>
                         <outlet property="retweetCount" destination="ROB-Bz-DRn" id="hpf-C4-Lbg"/>
                         <outlet property="retweetImage" destination="UJ9-iy-AIO" id="1jM-4y-edW"/>
                         <outlet property="retweetedBy" destination="KCT-9E-iZI" id="g9T-Nl-LwK"/>

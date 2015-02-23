@@ -40,9 +40,14 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
         )
     }
 
-    func statusUpdate(tweet: String, onComplete: (tweet: Tweet!, error: NSError!) -> Void) {
+    func statusUpdate(tweet: String, replyToId: String?, onComplete: (tweet: Tweet!, error: NSError!) -> Void) {
         // set up params
-        let params = [ "status" : tweet ]
+        var params = [ "status" : tweet ]
+        
+        // if replying to a tweet
+        if replyToId != nil {
+            params["in_reply_to_status_id"] = replyToId!
+        }
         
         // invoke API
         TwitterClient.sharedInstance.POST("1.1/statuses/update.json", parameters: params,
