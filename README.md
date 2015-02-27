@@ -43,3 +43,7 @@ Time spent: 20 hours
 
 #####  Basic Features (Home Timeline & Tweet Details)
 ![BasicFeatures](BasicFeatures.gif)
+
+#####  Composing and Replying
+![ComposingReplying](ComposingReplying.gif)
+
