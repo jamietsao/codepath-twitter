@@ -430,11 +430,11 @@
                             <constraint firstItem="s5Y-pP-uBq" firstAttribute="top" secondItem="IDY-Y3-F7p" secondAttribute="bottom" constant="19" id="E1W-Z1-s9P"/>
                             <constraint firstItem="hoy-bY-zr7" firstAttribute="centerX" secondItem="95O-kX-JKk" secondAttribute="centerX" id="EA0-QY-Xzd"/>
                             <constraint firstItem="PNb-0K-7NN" firstAttribute="leading" secondItem="IDY-Y3-F7p" secondAttribute="trailing" id="Kcz-PO-LjD"/>
-                            <constraint firstItem="YJu-HF-8FS" firstAttribute="leading" secondItem="ee1-MX-7cQ" secondAttribute="leading" id="L5p-oX-rnd"/>
                             <constraint firstAttribute="trailing" secondItem="AFr-nC-E0g" secondAttribute="trailing" id="LHq-D2-CLk"/>
                             <constraint firstItem="PNb-0K-7NN" firstAttribute="width" secondItem="uwn-SM-W2K" secondAttribute="width" id="LMz-IC-FBa"/>
                             <constraint firstAttribute="trailing" secondItem="PTR-X9-dDM" secondAttribute="trailing" id="M5H-KB-fbG"/>
                             <constraint firstItem="AFr-nC-E0g" firstAttribute="leading" secondItem="ee1-MX-7cQ" secondAttribute="leading" id="NrM-zD-h50"/>
+                            <constraint firstItem="YJu-HF-8FS" firstAttribute="top" secondItem="C1J-pJ-QNx" secondAttribute="bottom" id="Ovi-Kz-aOX"/>
                             <constraint firstAttribute="trailing" secondItem="YJu-HF-8FS" secondAttribute="trailing" id="SDj-dI-WJ6"/>
                             <constraint firstAttribute="centerX" secondItem="95O-kX-JKk" secondAttribute="centerX" id="Tek-GJ-fms"/>
                             <constraint firstItem="YJu-HF-8FS" firstAttribute="leading" secondItem="ee1-MX-7cQ" secondAttribute="leading" id="V6E-Gk-iiW"/>
@@ -446,7 +446,6 @@
                             <constraint firstItem="PNb-0K-7NN" firstAttribute="top" secondItem="YJu-HF-8FS" secondAttribute="bottom" id="gUZ-lw-Fpa"/>
                             <constraint firstItem="hoy-bY-zr7" firstAttribute="top" secondItem="fzL-6W-XQR" secondAttribute="bottom" constant="-3" id="gq2-wE-kJq"/>
                             <constraint firstItem="PNb-0K-7NN" firstAttribute="width" secondItem="IDY-Y3-F7p" secondAttribute="width" id="hKJ-vU-2k2"/>
-                            <constraint firstItem="YJu-HF-8FS" firstAttribute="top" secondItem="ee1-MX-7cQ" secondAttribute="top" constant="64" id="hQw-K8-wqp"/>
                             <constraint firstItem="i3I-Uv-zjq" firstAttribute="top" secondItem="AFr-nC-E0g" secondAttribute="bottom" id="jdA-ce-8Bi"/>
                             <constraint firstItem="PTR-X9-dDM" firstAttribute="leading" secondItem="ee1-MX-7cQ" secondAttribute="leading" id="k5H-sv-f7Y"/>
                             <constraint firstItem="PTR-X9-dDM" firstAttribute="top" secondItem="IDY-Y3-F7p" secondAttribute="bottom" id="k9O-R6-2vC"/>
@@ -636,7 +635,7 @@
                     </connections>
                 </panGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="199" y="406"/>
+            <point key="canvasLocation" x="169" y="406"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="80V-FR-c4f">

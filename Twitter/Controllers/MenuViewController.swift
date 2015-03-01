@@ -84,10 +84,6 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         // perform logout
         if indexPath.row == Constants.Menu.LogOutIndex {
             TwitterClient.sharedInstance.logout()
-            
-            
-            self.storyboard.in
-            
             self.performSegueWithIdentifier("logoutSegue", sender: self)
         } else {
             // deselect previous
