@@ -16,7 +16,8 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
     var openPosition: CGPoint!
     var closePosition: CGPoint!
     
-    // view controller that is currently in the container view
+    // current index path and view controller
+    var currentIndexPath: NSIndexPath!
     var currentVC: UIViewController!
 
     // container for current view
@@ -38,6 +39,8 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         // initialize table view
         self.tableView.dataSource = self
         self.tableView.delegate = self
+        tableView.estimatedRowHeight = 50
+        tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.separatorStyle = UITableViewCellSeparatorStyle.None
         self.tableView.tableFooterView = UIView(frame: CGRectZero)
         
@@ -49,7 +52,10 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         // bring container view to front
         self.view.bringSubviewToFront(self.containerView)
-        
+
+        // select "Home" by default
+        self.tableView.selectRowAtIndexPath(NSIndexPath(forRow: Constants.Menu.HomeIndex, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.None)
+        setSelectedMenuItem(NSIndexPath(forRow: Constants.Menu.HomeIndex, inSection: 0))
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -57,6 +63,7 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+
         let row = indexPath.row
         if row == Constants.Menu.HeaderIndex {
             let cell = tableView.dequeueReusableCellWithIdentifier(Constants.IDs.MenuUserCell) as MenuUserCell
@@ -69,9 +76,22 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
             cell.titleLabel.text = menuItemLabel
             return cell
         }
+
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+
+        // deselect previous 
+        if self.currentIndexPath != nil {
+            tableView.deselectRowAtIndexPath(self.currentIndexPath, animated: true)
+        }
+        
+        // keep track of currently selected indexPath
+        self.currentIndexPath = indexPath
+        
+        // customize cell selection color
+        setSelectedMenuItem(indexPath)
+        
         // animate container view to closed position and show new view
         UIView.animateWithDuration(0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: nil, animations: { () -> Void in
             self.containerView.center = self.closePosition
@@ -152,6 +172,11 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
         }
         
+    }
+    
+    func setSelectedMenuItem(indexPath: NSIndexPath) {
+        var cell = tableView.cellForRowAtIndexPath(indexPath)
+        cell?.contentView.backgroundColor = UIColor(red: 102/255, green: 117/255, blue: 127/255, alpha: 1)
     }
     
 }

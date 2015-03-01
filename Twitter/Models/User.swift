@@ -67,4 +67,11 @@ class User {
         return ""
     }
 
+    func getProfileUrlOriginal() -> String {
+        if let url = self.profileImageUrl {
+            return self.profileImageUrl.stringByReplacingOccurrencesOfString("_normal", withString: "")
+        }
+        return ""
+    }
+    
 }

@@ -42,7 +42,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         backButton.title = ""
         self.navigationItem.backBarButtonItem = backButton
         
-        
         // banner image
         if let url = self.user?.profileBannerUrl {
             self.bannerImage.setImageWithURL(NSURL(string: url))

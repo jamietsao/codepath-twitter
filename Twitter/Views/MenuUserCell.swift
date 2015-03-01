@@ -31,7 +31,7 @@ class MenuUserCell: UITableViewCell {
         self.user = user
         
         // profile image
-        if let url = self.user?.getProfileUrlBigger() {
+        if let url = self.user?.getProfileUrlOriginal() {
             self.profileImage.setImageWithURL(NSURL(string: url))
         }
         
