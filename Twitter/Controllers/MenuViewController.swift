@@ -81,23 +81,32 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 
-        // deselect previous 
-        if self.currentIndexPath != nil {
-            tableView.deselectRowAtIndexPath(self.currentIndexPath, animated: true)
+        // perform logout
+        if indexPath.row == Constants.Menu.LogOutIndex {
+            TwitterClient.sharedInstance.logout()
+            
+            
+            self.storyboard.in
+            
+            self.performSegueWithIdentifier("logoutSegue", sender: self)
+        } else {
+            // deselect previous
+            if self.currentIndexPath != nil {
+                tableView.deselectRowAtIndexPath(self.currentIndexPath, animated: true)
+            }
+            
+            // keep track of currently selected indexPath
+            self.currentIndexPath = indexPath
+            
+            // customize cell selection color
+            setSelectedMenuItem(indexPath)
+            
+            // animate container view to closed position and show new view
+            UIView.animateWithDuration(0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: nil, animations: { () -> Void in
+                self.containerView.center = self.closePosition
+                self.switchViews(indexPath.row)
+                }, completion: nil)
         }
-        
-        // keep track of currently selected indexPath
-        self.currentIndexPath = indexPath
-        
-        // customize cell selection color
-        setSelectedMenuItem(indexPath)
-        
-        // animate container view to closed position and show new view
-        UIView.animateWithDuration(0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: nil, animations: { () -> Void in
-            self.containerView.center = self.closePosition
-            self.switchViews(indexPath.row)
-        }, completion: nil)
-        
     }
     
     func switchViews(menuItemIndex: Int) {

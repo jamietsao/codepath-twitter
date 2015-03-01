@@ -204,5 +204,7 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
         )
     }
     
-    
+    func logout() {
+        User.currentUser = nil
+    }
 }

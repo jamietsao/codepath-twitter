@@ -18,7 +18,8 @@ struct Constants {
         static let HeaderIndex = 0
         static let ProfileIndex = 1
         static let HomeIndex = 2
-        static let MenuItems = [ "Header", "Profile", "Home", "Mentions", "Favorites" ]
+        static let LogOutIndex = Menu.MenuItems.count - 1
+        static let MenuItems = [ "Header", "Profile", "Home", "Mentions", "Favorites", "Log Out" ]
         static let MenuViewtypes = [ TimelineViewType.Home, TimelineViewType.Mentions, TimelineViewType.Favorites ]
         static let MenuViewTypeTitle: [ TimelineViewType : String ] = [ TimelineViewType.Home : "Home", TimelineViewType.Mentions : "Mentions", TimelineViewType.Favorites : "Favorites" ]
     }
