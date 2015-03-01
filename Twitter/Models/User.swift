@@ -43,6 +43,10 @@ class User {
     var name: String!
     var username: String!
     var profileImageUrl: String!
+    var profileBannerUrl: String!
+    var tweetCount: Int!
+    var followingCount: Int!
+    var followerCount: Int!
     
     init(dict: NSDictionary) {
         self.dict = dict
@@ -50,6 +54,10 @@ class User {
         name = dict["name"] as? String
         username = dict["screen_name"] as? String
         profileImageUrl = dict["profile_image_url"] as? String
+        profileBannerUrl = dict["profile_banner_url"] as? String
+        tweetCount = dict["statuses_count"] as? Int
+        followingCount = dict["friends_count"] as? Int
+        followerCount = dict["followers_count"] as? Int
     }
 
     func getProfileUrlBigger() -> String {
