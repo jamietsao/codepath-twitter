@@ -8,10 +8,13 @@
 
 import UIKit
 
-class MenuViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+protocol MenuButtonDelegate: class {
+    func onMenuButton(viewController: UIViewController)
+}
+
+class MenuViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MenuButtonDelegate {
 
     // positions to help with menu animation
-    var firstPan = true
     var originalCenter: CGPoint!
     var openPosition: CGPoint!
     var closePosition: CGPoint!
@@ -31,10 +34,6 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
 
         // default to home timeline
         switchViews(Constants.Menu.HomeIndex)
-
-        // initialize open/close positions
-        closePosition = self.containerView.center
-        openPosition = CGPointMake(containerView.center.x + (containerView.frame.width * 0.8), containerView.center.y)
      
         // initialize table view
         self.tableView.dataSource = self
@@ -57,6 +56,12 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.tableView.selectRowAtIndexPath(NSIndexPath(forRow: Constants.Menu.HomeIndex, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.None)
         setSelectedMenuItem(NSIndexPath(forRow: Constants.Menu.HomeIndex, inSection: 0))
     }
+    
+    override func viewDidAppear(animated: Bool) {
+        // initialize open/close positions
+        closePosition = self.containerView.center
+        openPosition = CGPointMake(containerView.center.x + (containerView.frame.width * 0.8), containerView.center.y)
+    }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return Constants.Menu.MenuItems.count
@@ -73,7 +78,10 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         } else {
             let menuItemLabel = Constants.Menu.MenuItems[row]
             let cell = tableView.dequeueReusableCellWithIdentifier(Constants.IDs.MenuItemCell) as MenuItemCell
+            cell.iconImage.tintColor = UIColor.whiteColor()
+            cell.iconImage.image = UIImage(named: menuItemLabel)
             cell.titleLabel.text = menuItemLabel
+            
             return cell
         }
 
@@ -120,10 +128,12 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         if menuItemIndex == Constants.Menu.ProfileIndex {
             nc = self.storyboard?.instantiateViewControllerWithIdentifier(Constants.IDs.ProfileNavigationController) as UINavigationController
             let vc = nc.topViewController as ProfileViewController
+            vc.menuButtonDelegate = self
             vc.setUser(User.currentUser!)
         } else {
             nc = self.storyboard?.instantiateViewControllerWithIdentifier(Constants.IDs.HomeTimelineNavigationController) as UINavigationController
             let vc = nc.topViewController as HomeTimelineViewController
+            vc.menuButtonDelegate = self
             vc.setViewType(Constants.Menu.MenuViewtypes[menuItemIndex - 2])
         }
         
@@ -140,11 +150,6 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         if sender.state == UIGestureRecognizerState.Began {
             originalCenter = self.containerView.center
-            if firstPan {
-                closePosition = self.containerView.center
-                openPosition = CGPointMake(containerView.center.x + (containerView.frame.width * 0.8), containerView.center.y)
-                firstPan = false
-            }
         } else if sender.state == UIGestureRecognizerState.Changed {
             
             var location = sender.locationInView(self.view)
@@ -182,6 +187,12 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
     func setSelectedMenuItem(indexPath: NSIndexPath) {
         var cell = tableView.cellForRowAtIndexPath(indexPath)
         cell?.contentView.backgroundColor = UIColor(red: 102/255, green: 117/255, blue: 127/255, alpha: 1)
+    }
+    
+    func onMenuButton(viewController: UIViewController) {
+        UIView.animateWithDuration(0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: nil, animations: { () -> Void in
+            self.containerView.center = self.openPosition
+            }, completion: nil)
     }
     
 }

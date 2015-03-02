@@ -30,7 +30,10 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // refresh control
     var refreshControl: UIRefreshControl!
-    
+
+    // menu button delegate
+    var menuButtonDelegate: MenuButtonDelegate!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -42,13 +45,18 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         backButton.title = ""
         self.navigationItem.backBarButtonItem = backButton
         
+        // add menu nav button
+        let menuButton = UIBarButtonItem(image: UIImage(named: "Menu"), style: UIBarButtonItemStyle.Plain, target: self, action: "onMenuButton")
+        menuButton.tintColor = UIColor.whiteColor()
+        navigationItem.leftBarButtonItem = menuButton
+        
         // banner image
         if let url = self.user?.profileBannerUrl {
             self.bannerImage.setImageWithURL(NSURL(string: url))
         }
         
         // profile image
-        if let url = self.user?.getProfileUrlBigger() {
+        if let url = self.user?.getProfileUrlOriginal() {
             self.profileImage.setImageWithURL(NSURL(string: url))
         }
         self.profileImage.layer.cornerRadius = 3
@@ -172,6 +180,10 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 // TODO: display error
             }
         })
+    }
+
+    func onMenuButton() {
+        self.menuButtonDelegate.onMenuButton(self)
     }
 
 }

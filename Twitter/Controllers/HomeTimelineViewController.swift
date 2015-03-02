@@ -19,6 +19,9 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
     // refresh control
     var refreshControl: UIRefreshControl!
 
+    // menu button delegate
+    var menuButtonDelegate: MenuButtonDelegate!
+    
     @IBOutlet weak var tableView: UITableView!
 
     override func viewDidLoad() {
@@ -31,12 +34,18 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
         backButton.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14)], forState: UIControlState.Normal)
         backButton.title = ""
         self.navigationItem.backBarButtonItem = backButton
+
+        // add menu nav button
+        let menuButton = UIBarButtonItem(image: UIImage(named: "Menu"), style: UIBarButtonItemStyle.Plain, target: self, action: "onMenuButton")
+        menuButton.tintColor = UIColor.whiteColor()
+        navigationItem.leftBarButtonItem = menuButton
         
         // initialize table view
         tableView.dataSource = self
         tableView.delegate = self
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.tableFooterView = UIView(frame: CGRectZero)
 
         // set up UIRefreshControl
         refreshControl = UIRefreshControl()
@@ -172,18 +181,22 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
         var tableView = gestureRecognizer.view as UITableView
         var point = touch.locationInView(tableView)
         let indexPath = tableView.indexPathForRowAtPoint(point)
-        let cell = tableView.cellForRowAtIndexPath(indexPath!) as TweetCell
         
-        // only handle tap gesture if reply/retweet/favorite images were tapped
-        point = touch.locationInView(cell)
-        if CGRectContainsPoint(cell.replyImage.frame, point) ||
-           CGRectContainsPoint(cell.retweetImage.frame, point) ||
-           CGRectContainsPoint(cell.favoriteImage.frame, point) ||
-           CGRectContainsPoint(cell.profileImage.frame, point){
-            return true
-        } else {
-            return false
+        if indexPath != nil {
+            let cell = tableView.cellForRowAtIndexPath(indexPath!) as TweetCell
+            
+            // only handle tap gesture if reply/retweet/favorite images were tapped
+            point = touch.locationInView(cell)
+            if CGRectContainsPoint(cell.replyImage.frame, point) ||
+                CGRectContainsPoint(cell.retweetImage.frame, point) ||
+                CGRectContainsPoint(cell.favoriteImage.frame, point) ||
+                CGRectContainsPoint(cell.profileImage.frame, point){
+                    return true
+            } else {
+                return false
+            }
         }
+        return false
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -260,6 +273,10 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
     
     func setViewType(viewType: Constants.TimelineViewType) {
         self.viewType = viewType
+    }
+    
+    func onMenuButton() {
+        self.menuButtonDelegate.onMenuButton(self)
     }
     
 }

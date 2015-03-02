@@ -14,14 +14,14 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eLh-5d-s6A">
-                        <rect key="frame" x="22" y="8" width="30" height="30"/>
+                        <rect key="frame" x="35" y="16" width="15" height="15"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="30" id="adR-zj-T9r"/>
-                            <constraint firstAttribute="height" constant="30" id="hvD-fX-a8O"/>
+                            <constraint firstAttribute="width" constant="15" id="adR-zj-T9r"/>
+                            <constraint firstAttribute="height" constant="15" id="hvD-fX-a8O"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profile" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oA7-hr-1T0">
-                        <rect key="frame" x="65" y="14" width="41" height="17"/>
+                        <rect key="frame" x="70" y="14.5" width="41" height="17"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
@@ -29,12 +29,12 @@
                 </subviews>
                 <color key="backgroundColor" red="0.16078431369999999" green="0.1843137255" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 <constraints>
-                    <constraint firstItem="eLh-5d-s6A" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="22" id="6B2-pg-Urh"/>
+                    <constraint firstItem="eLh-5d-s6A" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="35" id="6B2-pg-Urh"/>
                     <constraint firstItem="oA7-hr-1T0" firstAttribute="centerY" secondItem="eLh-5d-s6A" secondAttribute="centerY" id="Nub-UB-b8e"/>
-                    <constraint firstItem="oA7-hr-1T0" firstAttribute="leading" secondItem="eLh-5d-s6A" secondAttribute="trailing" constant="13" id="Nz9-Zo-I7n"/>
-                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="eLh-5d-s6A" secondAttribute="bottom" constant="8" id="hFE-bm-veV"/>
+                    <constraint firstItem="oA7-hr-1T0" firstAttribute="leading" secondItem="eLh-5d-s6A" secondAttribute="trailing" constant="20" id="Nz9-Zo-I7n"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="eLh-5d-s6A" secondAttribute="bottom" constant="16" id="hFE-bm-veV"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="oA7-hr-1T0" secondAttribute="trailing" constant="20" id="tAV-hH-Ias"/>
-                    <constraint firstItem="eLh-5d-s6A" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="uJq-zN-rOW"/>
+                    <constraint firstItem="eLh-5d-s6A" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="16" id="uJq-zN-rOW"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
