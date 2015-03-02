@@ -82,10 +82,3 @@ Time spent: 15  hours
 #####  Twitter Redux (Hamburger Menu and Profile page)
 ![TwitterRedux](TwitterRedux.gif)
 
-
-
-
-
-#####  Composing and Replying
-![ComposingReplying](ComposingReplying.gif)
-
