@@ -1,4 +1,4 @@
-## CodePath Spring 2015 - Week 3 Homework: Twitter App
+## CodePath Spring 2015 - Week 3 Homework: Twitter App (see below for Week 4 Redux)
 
 Inspired by the official Twitter app, this is my version of the Twitter app built on top of the [Twitter API](https://apps.twitter.com/).
 
@@ -43,6 +43,48 @@ Time spent: 20 hours
 
 #####  Basic Features (Home Timeline & Tweet Details)
 ![BasicFeatures](BasicFeatures.gif)
+
+## CodePath Spring 2015 - Week 4 Homework: Twitter Redux
+
+This homework adds on to the Twitter app built in week 3 (above)
+
+Time spent: 15  hours
+
+### Features
+
+- [X] Hamburger menu
+  - [X] Dragging anywhere in the view should reveal the menu.
+  - [X] The menu should include links to your profile, the home timeline, and the mentions view.
+  - [X] The menu can look similar to the LinkedIn menu below or feel free to take liberty with the UI.
+- [X] Profile page
+  - [X] Contains the user header view
+  - [X] Contains a section with the users basic stats: # tweets, # following, # followers
+  - [] Optional: Implement the paging view for the user description.
+  - [] Optional: As the paging view moves, increase the opacity of the background screen. See the actual Twitter app for this effect
+  - [] Optional: Pulling down the profile page should blur and resize the header image.
+- [X] Home Timeline
+  - [X] Tapping on a user image should bring up that user's profile page
+- [] Optional: Account switching
+  - [] Long press on tab bar to bring up Account view with animation
+  - [] Tap account to switch to
+  - [] Include a plus button to Add an Account
+  - [] Swipe to delete an account
+
+#### Other notables
+
+- [X] Added user's own tweets to profile view
+- [X] In addition to pan gesture, added hamburger menu button in nav bar to open/close menu
+- [X] Added "Favorites" and "Log Out" to menu
+- [X] Downloaded pretty icons for menu items =)
+
+### Walkthrough
+
+#####  Twitter Redux (Hamburger Menu and Profile page)
+![TwitterRedux](TwitterRedux.gif)
+
+
+
+
 
 #####  Composing and Replying
 ![ComposingReplying](ComposingReplying.gif)
