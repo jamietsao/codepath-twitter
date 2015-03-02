@@ -8,8 +8,11 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ComposeTweetViewDelegate {
+class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ComposeTweetViewDelegate, ContainerViewDelegate, UIGestureRecognizerDelegate {
 
+    // container open/closed state
+    var opened: Bool = false
+    
     // current user
     var user: User!
 
@@ -181,9 +184,33 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
         })
     }
-
-    func onMenuButton() {
-        self.menuButtonDelegate.onMenuButton(self)
+    
+    @IBAction func onTap(sender: UITapGestureRecognizer) {
+        // if this view is slide open, close view via delegate
+        if self.opened {
+            self.opened = false
+            self.menuButtonDelegate.onMenuButton(self, open: false)
+            return
+        }
+        // else do nothing
     }
 
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
+        // if this view is slid open, allow touch gesture
+        return self.opened
+    }
+    
+    func onMenuButton() {
+        self.opened = !self.opened
+        self.menuButtonDelegate.onMenuButton(self, open: self.opened)
+    }
+
+    func didSlideOpen() {
+        self.opened = true
+    }
+    
+    func didSlideClosed() {
+        self.opened = false
+    }
+    
 }

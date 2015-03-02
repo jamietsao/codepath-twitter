@@ -9,7 +9,12 @@
 import UIKit
 
 protocol MenuButtonDelegate: class {
-    func onMenuButton(viewController: UIViewController)
+    func onMenuButton(viewController: UIViewController, open: Bool)
+}
+
+protocol ContainerViewDelegate: class {
+    func didSlideOpen()
+    func didSlideClosed()
 }
 
 class MenuViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MenuButtonDelegate {
@@ -31,7 +36,7 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // default to home timeline
         switchViews(Constants.Menu.HomeIndex)
      
@@ -172,12 +177,30 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             if velocity.x > 0 {
                 UIView.animateWithDuration(0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: nil, animations: { () -> Void in
+                    // animate to open position
                     self.containerView.center = self.openPosition
+                    
+                    // TODO: clean up this ugly hack
+                    var vc = (self.currentVC as UINavigationController).topViewController
+                    if vc is HomeTimelineViewController {
+                        (vc as HomeTimelineViewController).didSlideOpen()
+                    } else if vc is ProfileViewController {
+                        (vc as ProfileViewController).didSlideOpen()
+                    }
                     }, completion: nil)
                 
             } else {
                 UIView.animateWithDuration(0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: nil, animations: { () -> Void in
+                    // animate to close position
                     self.containerView.center = self.closePosition
+
+                    // TODO: clean up this ugly hack
+                    var vc = (self.currentVC as UINavigationController).topViewController
+                    if vc is HomeTimelineViewController {
+                        (vc as HomeTimelineViewController).didSlideClosed()
+                    } else if vc is ProfileViewController {
+                        (vc as ProfileViewController).didSlideClosed()
+                    }
                     }, completion: nil)
             }
         }
@@ -189,10 +212,18 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell?.contentView.backgroundColor = UIColor(red: 102/255, green: 117/255, blue: 127/255, alpha: 1)
     }
     
-    func onMenuButton(viewController: UIViewController) {
-        UIView.animateWithDuration(0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: nil, animations: { () -> Void in
-            self.containerView.center = self.openPosition
-            }, completion: nil)
+    func onMenuButton(viewController: UIViewController, open: Bool) {
+        if open {
+            UIView.animateWithDuration(0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: nil, animations: { () -> Void in
+                self.containerView.center = self.openPosition
+                }, completion: nil)
+        } else {
+            UIView.animateWithDuration(0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: nil, animations: { () -> Void in
+                self.containerView.center = self.closePosition
+                }, completion: nil)
+            
+        }
+        
     }
     
 }

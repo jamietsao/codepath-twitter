@@ -423,6 +423,7 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="IDY-Y3-F7p" firstAttribute="top" secondItem="YJu-HF-8FS" secondAttribute="bottom" id="0x3-04-CJr"/>
                             <constraint firstItem="uwn-SM-W2K" firstAttribute="leading" secondItem="PNb-0K-7NN" secondAttribute="trailing" id="3p5-3d-0gA"/>
@@ -453,6 +454,9 @@
                             <constraint firstItem="IDY-Y3-F7p" firstAttribute="leading" secondItem="ee1-MX-7cQ" secondAttribute="leading" id="mfG-pJ-vng"/>
                             <constraint firstItem="95O-kX-JKk" firstAttribute="top" secondItem="C1J-pJ-QNx" secondAttribute="bottom" constant="14" id="pKN-i7-liM"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="KvS-hG-mmh" appends="YES" id="B8f-Yw-P6l"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="XE7-iK-5lM">
                         <barButtonItem key="rightBarButtonItem" systemItem="compose" id="EBK-vy-0BE">
@@ -474,6 +478,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ira-Qt-Yeg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="KvS-hG-mmh">
+                    <connections>
+                        <action selector="onTap:" destination="zW0-Wu-FUp" id="cH8-w0-gjG"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="998" y="746"/>
         </scene>

@@ -8,8 +8,11 @@
 
 import UIKit
 
-class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, ComposeTweetViewDelegate {
+class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, ComposeTweetViewDelegate, ContainerViewDelegate {
 
+    // container open/closed state
+    var opened: Bool = false
+    
     // view type
     var viewType: Constants.TimelineViewType!
     
@@ -77,6 +80,14 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
     }
 
     func onTap(gestureRecognizer: UIGestureRecognizer) {
+        
+        // if this view is slide open, close view via delegate
+        if self.opened {
+            self.opened = false
+            self.menuButtonDelegate.onMenuButton(self, open: false)
+            return
+        }
+        
         if gestureRecognizer.state == UIGestureRecognizerState.Ended {
             // get tapped cell
             var tableView = gestureRecognizer.view as UITableView
@@ -177,6 +188,12 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
+        
+        // if this view is slid open, allow touch gesture
+        if self.opened {
+            return true
+        }
+        
         // get tapped cell
         var tableView = gestureRecognizer.view as UITableView
         var point = touch.locationInView(tableView)
@@ -276,7 +293,15 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func onMenuButton() {
-        self.menuButtonDelegate.onMenuButton(self)
+        self.opened = !self.opened
+        self.menuButtonDelegate.onMenuButton(self, open: self.opened)
     }
     
+    func didSlideOpen() {
+        self.opened = true
+    }
+    
+    func didSlideClosed() {
+        self.opened = false
+    }
 }
