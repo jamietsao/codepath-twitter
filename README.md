@@ -74,6 +74,7 @@ Time spent: 15  hours
 
 - [X] Added user's own tweets to profile view
 - [X] In addition to pan gesture, added hamburger menu button in nav bar to open/close menu
+- [X] Displaying profile image, name, username of currently authenticated user to top of menu
 - [X] Added "Favorites" and "Log Out" to menu
 - [X] Downloaded pretty icons for menu items =)
 
