@@ -8,32 +8,47 @@
 
 import UIKit
 
-class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, ComposeTweetViewDelegate {
+class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, ComposeTweetViewDelegate, ContainerViewDelegate {
 
+    // container open/closed state
+    var opened: Bool = false
+    
+    // view type
+    var viewType: Constants.TimelineViewType!
+    
+    // current array of Tweets backing the table view
     var tweets: [Tweet] = []
 
     // refresh control
     var refreshControl: UIRefreshControl!
 
+    // menu button delegate
+    var menuButtonDelegate: MenuButtonDelegate!
+    
     @IBOutlet weak var tableView: UITableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // customize nav bar & back button
-        self.navigationItem.title = "Home"
+        self.navigationItem.title = Constants.Menu.MenuViewTypeTitle[viewType]
         self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
         let backButton = UIBarButtonItem(title: nil, style: .Bordered, target: nil, action: nil)
         backButton.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14)], forState: UIControlState.Normal)
         backButton.title = ""
         self.navigationItem.backBarButtonItem = backButton
-        
+
+        // add menu nav button
+        let menuButton = UIBarButtonItem(image: UIImage(named: "Menu"), style: UIBarButtonItemStyle.Plain, target: self, action: "onMenuButton")
+        menuButton.tintColor = UIColor.whiteColor()
+        navigationItem.leftBarButtonItem = menuButton
         
         // initialize table view
         tableView.dataSource = self
         tableView.delegate = self
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.tableFooterView = UIView(frame: CGRectZero)
 
         // set up UIRefreshControl
         refreshControl = UIRefreshControl()
@@ -65,6 +80,14 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
     }
 
     func onTap(gestureRecognizer: UIGestureRecognizer) {
+        
+        // if this view is slide open, close view via delegate
+        if self.opened {
+            self.opened = false
+            self.menuButtonDelegate.onMenuButton(self, open: false)
+            return
+        }
+        
         if gestureRecognizer.state == UIGestureRecognizerState.Ended {
             // get tapped cell
             var tableView = gestureRecognizer.view as UITableView
@@ -77,7 +100,19 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
             
             // perform appropriate action
             var pointInCell = gestureRecognizer.locationInView(cell)
-            if CGRectContainsPoint(cell.replyImage.frame, pointInCell) {
+            if CGRectContainsPoint(cell.profileImage.frame, pointInCell) {
+                
+                // get user corresponding to tapped profile
+                var user = thisTweet.isRetweet() ? thisTweet.retweetedTweet?.user : thisTweet.user
+                
+                // get profile view controller
+                let vc = self.storyboard?.instantiateViewControllerWithIdentifier(Constants.IDs.ProfileViewController) as ProfileViewController
+                
+                vc.setUser(user!)
+                
+                self.navigationController?.pushViewController(vc, animated: true)
+                
+            } else if CGRectContainsPoint(cell.replyImage.frame, pointInCell) {
 
                 // get nav controller of the compose view
                 let composeNC = self.storyboard?.instantiateViewControllerWithIdentifier("ComposeTweetNavigationController") as
@@ -153,21 +188,32 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
+        
+        // if this view is slid open, allow touch gesture
+        if self.opened {
+            return true
+        }
+        
         // get tapped cell
         var tableView = gestureRecognizer.view as UITableView
         var point = touch.locationInView(tableView)
         let indexPath = tableView.indexPathForRowAtPoint(point)
-        let cell = tableView.cellForRowAtIndexPath(indexPath!) as TweetCell
         
-        // only handle tap gesture if reply/retweet/favorite images were tapped
-        point = touch.locationInView(cell)
-        if CGRectContainsPoint(cell.replyImage.frame, point) ||
-           CGRectContainsPoint(cell.retweetImage.frame, point) ||
-           CGRectContainsPoint(cell.favoriteImage.frame, point) {
-            return true
-        } else {
-            return false
+        if indexPath != nil {
+            let cell = tableView.cellForRowAtIndexPath(indexPath!) as TweetCell
+            
+            // only handle tap gesture if reply/retweet/favorite images were tapped
+            point = touch.locationInView(cell)
+            if CGRectContainsPoint(cell.replyImage.frame, point) ||
+                CGRectContainsPoint(cell.retweetImage.frame, point) ||
+                CGRectContainsPoint(cell.favoriteImage.frame, point) ||
+                CGRectContainsPoint(cell.profileImage.frame, point){
+                    return true
+            } else {
+                return false
+            }
         }
+        return false
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -176,7 +222,7 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("TweetCell", forIndexPath: indexPath) as TweetCell
-        
+
         // get tweet for this row and set it in the cell
         let tweet = tweets[indexPath.row]
         cell.setTweet(tweet)
@@ -226,7 +272,7 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         
         // load latest home timeline
-        TwitterClient.sharedInstance.getHomeTimeline { (tweets, error) -> Void in
+        TwitterClient.sharedInstance.getTimeline(self.viewType, userId: nil, onComplete: { (tweets, error) -> Void in
             if error == nil {
                 //                self.networkErrorLabel.hidden = true
                 self.tweets = tweets
@@ -239,7 +285,23 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
                 NSLog("Failed to retrieve tweets: \(error)")
                 // TODO: display error
             }
-        }
+        })
     }
     
+    func setViewType(viewType: Constants.TimelineViewType) {
+        self.viewType = viewType
+    }
+    
+    func onMenuButton() {
+        self.opened = !self.opened
+        self.menuButtonDelegate.onMenuButton(self, open: self.opened)
+    }
+    
+    func didSlideOpen() {
+        self.opened = true
+    }
+    
+    func didSlideClosed() {
+        self.opened = false
+    }
 }

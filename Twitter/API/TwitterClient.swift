@@ -23,13 +23,29 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
     // REST API (https://dev.twitter.com/rest/public)
     //
 
-    func getHomeTimeline(onComplete: (tweets: [Tweet]!, error: NSError!) -> Void) {
-        // set up params
-        let params = [ "count" : "50" ]
+    func getTimeline(type: Constants.TimelineViewType, userId: String!, onComplete: (tweets: [Tweet]!, error: NSError!) -> Void) {
+        
+        var endpoint: String
+        switch type {
+        case .Home:
+            endpoint = "statuses/home_timeline.json"
+        case .Mentions:
+            endpoint = "statuses/mentions_timeline.json"
+        case .User:
+            endpoint = "statuses/user_timeline.json"
+        case .Favorites:
+            endpoint = "favorites/list.json"
+        }
 
-        TwitterClient.sharedInstance.GET("1.1/statuses/home_timeline.json", parameters: params,
+        // set up params
+        var params = [ "count" : "50" ]
+        if let id = userId {
+            params["user_id"] = id
+        }
+
+        TwitterClient.sharedInstance.GET("1.1/\(endpoint)", parameters: params,
             success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
-                println("\(response as [NSDictionary])")
+//                println("\(response as [NSDictionary])")
                 var tweets = Tweet.tweetsFromArray(response as [NSDictionary])
                 onComplete(tweets: tweets, error: nil)
             },
@@ -40,6 +56,7 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
         )
     }
 
+    
     func statusUpdate(tweet: String, replyToId: String?, onComplete: (tweet: Tweet!, error: NSError!) -> Void) {
         // set up params
         var params = [ "status" : tweet ]
@@ -164,6 +181,8 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
                 // retrieve user via REST API
                 TwitterClient.sharedInstance.GET("1.1/account/verify_credentials.json", parameters: nil,
                     success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+                        println(response)
+                        
                         var user = User(dict: response as NSDictionary)
                         User.currentUser = user
                         println("Logged in as: \(user.username)")
@@ -185,5 +204,7 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
         )
     }
     
-    
+    func logout() {
+        User.currentUser = nil
+    }
 }

@@ -30,6 +30,13 @@ class TweetCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
+        // set up tap gesture recognizer for profile image
+        var tap = UITapGestureRecognizer(target: self, action: "onTap:")
+        tap.delegate = self
+        tap.numberOfTapsRequired = 1
+        tap.numberOfTouchesRequired = 1
+        self.profileImage.addGestureRecognizer(tap)
+        
         // rounded corners for profile image
         self.profileImage.layer.cornerRadius = 3
         self.profileImage.clipsToBounds = true
@@ -121,5 +128,5 @@ class TweetCell: UITableViewCell {
         }
         
     }
-    
+        
 }
